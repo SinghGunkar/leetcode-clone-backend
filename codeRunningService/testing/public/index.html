@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        h2 {
+            margin-top: 1em;
+        }
+    </style>
+    
+    <title>Code Upload</title>
+</head>
+<body>
+    <h2>Submit File</h2>
+    <form method="post" action="/submit-file" enctype="multipart/form-data">
+        <input type="file" name="upload" id="upload"/>
+        <input type="submit" name="fileSubmit" id="fileSubmit">
+    </form>
+
+    <h2>Submit Text</h2>
+    <form method="post" action="/submit-text" enctype="application/json">
+        <textarea name="text" id="text" placeholder="Write your code here"></textarea>
+        <input type="submit" name="textSubmit" id="textSubmit">
+    </form>
+
+
+</body>
+</html>

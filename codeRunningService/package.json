@@ -1,0 +1,22 @@
+{
+  "name": "code-running-service",
+  "version": "1.0.0",
+  "description": "Internal service for CMPT 372 Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@csil-git1.cs.surrey.sfu.ca:act18/cmpt-372-group-17.git"
+  },
+  "author": "Alvin Tsang",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
+}
