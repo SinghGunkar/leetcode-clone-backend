@@ -11,11 +11,15 @@ const path = require('path');
 const cp = require('child_process');
 const os = require('os');
 const fs = require('fs');
+const Logger = require('./Logger')
 
 // constants
 const app = express();
 const PUBLIC_PATH = path.join(__dirname, '/testing/public')
-const UPLOAD_PATH = path.join(__dirname, '/code/main.py')
+const UPLOAD_PATH = path.join(__dirname, '/code/input/main.py')
+const OUTPUT_PATH = path.join(__dirname, '/code/output/out.txt')
+const LOG_PATH = path.join(__dirname, '/code/output/log.txt')
+
 
 // parsing body
 app.use(express.json());
@@ -51,36 +55,47 @@ if (process.argv[2] === "1") {
  * User submits code in the form of a textarea
  */
 app.post("/submit-text", (req, res) => {
-    console.log("Text submission logged");
+    let log = new Logger(LOG_PATH); // list of strings to be logged in log.txt
+    log.add("Text submission received");
+
     let text = req.body.text;
+    
     // write text code to file
+    log.add("Writing text to file...");
     fs.writeFile(UPLOAD_PATH, text, err => {
         if (err) {
-            console.error(err);
-            res.send(500);
+            log.add(err);
+            // write to log and return
+            !log.writeToLog() ? res.status(500) : res.status(500).sendFile(LOG_PATH);
             return;
+        } else {
+            log.add("File write successful");
         }
     });
     // execute code
-    if (os.platform() === 'win32'){
-        cp.exec(`python3 ${UPLOAD_PATH}`, (error, stdout, stderr) => {
-            if (error) {
-                errorMessage = error.message 
-                console.log(`error: ${errorMessage}`);
-                res.status(400).send(errorMessage);
-            } else if (stderr) {
-                console.log(`stderr: ${stderr}`);
-                res.status(400).send(stderr);
-            } else {
-                console.log(`stdout: ${stdout}`);
-                res.status(200).send(stdout);
-            }
-        });
-    }
-    else{
-        console.log(`Can't run on ${os.platform}, ${os.release}`);
-        res.sendStatus(500);
-    }
+    log.add("Executing file...");
+    cp.exec(`python3 ${UPLOAD_PATH}`, (error, stdout, stderr) => {
+        if (error) {
+            log.add(`error: ${error.message }`)
+            // write to log and return
+            !log.writeToLog() ? res.status(500) : res.status(400).sendFile(LOG_PATH);
+        } else if (stderr) {
+            log.add(`stderr: ${stderr}`);
+            // write to log and return
+            !log.writeToLog() ? res.status(500) : res.status(400).sendFile(LOG_PATH);
+        } else {
+            log.add(`stdout: ${stdout}`);
+            fs.writeFile(OUTPUT_PATH, stdout, err => {
+                if (err) {
+                    log.add(err);
+                    // write to log and return
+                    !log.writeToLog() ? res.status(500) : res.status(400).sendFile(LOG_PATH);
+                } else { // no errors, send result
+                    res.status(200).sendFile(OUTPUT_PATH);
+                }  
+            });
+        }
+    });
 });
 
 
@@ -134,3 +149,8 @@ app.listen(5000, () => {
 });
 
 
+
+
+function writeToLog(text_list) {
+    return;
+}

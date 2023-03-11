@@ -4,7 +4,8 @@
   "description": "Internal service for CMPT 372 Project",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js 1"
+    "start": "node index.js",
+    "test_manual": "nodemon index.js 1"
   },
   "repository": {
     "type": "git",

@@ -10,21 +10,26 @@
             margin-top: 1em;
         }
     </style>
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+    <script src="/submit.js" defer></script>
+
     <title>Code Upload</title>
 </head>
 <body>
     <h2>Submit File</h2>
     <form method="post" action="/submit-file" enctype="multipart/form-data">
         <input type="file" name="upload" id="upload"/>
-        <input type="submit" name="fileSubmit" id="fileSubmit">
+        <input type="submit" name="fileSubmit" id="fileSubmit" onclick="submit_text()">
     </form>
 
     <h2>Submit Text</h2>
-    <form method="post" action="/submit-text" enctype="application/json">
+    <form id="text-form" enctype="application/json"  onSubmit="return false;">
         <textarea name="text" id="text" placeholder="Write your code here"></textarea>
-        <input type="submit" name="textSubmit" id="textSubmit">
+        <input type="submit" name="textSubmit" id="textSubmit" onclick="submit_text()">
     </form>
+
+    <h3>Output</h3>
+    <p name="output" id="output"></p>
 
 
 </body>
