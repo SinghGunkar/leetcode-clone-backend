@@ -91,42 +91,41 @@ app.post("/submit-text", (req, res) => {
  * User submits code in the form of a file
  */
 app.post("/submit-file", (req, res) => {
+    let log = new Logger();
     // parse file
     let file = req.files.upload
+    log.add("File submission received!")
 
     if (file.name.split(".")[1] !== "py") { // check if file is a python file
-        res.status(400).send("File must have a .py extension");
+        log.add("File must have a .py extension")
+        res.status(400).send(log.createLog());
         return;
     }
-    console.log(`${file.name} file submission logged`);
+    log.add(`${file.name} file submission logged`);
 
     // save file data to UPLOAD_PATH
     file.mv(UPLOAD_PATH, (err) => {
         if (err) {
-            res.status(500).send(err);
+            log.add(err);
+            res.status(500).send(log.createLog());
             return;
         }   
     });
 
-    if (os.platform() === 'win32'){
-        cp.exec(`python3 ${UPLOAD_PATH}`, (error, stdout, stderr) => {
-            if (error) {
-                errorMessage = error.message 
-                console.log(`error: ${errorMessage}`);
-                res.status(400).send(errorMessage);
-            } else if (stderr) {
-                console.log(`stderr: ${stderr}`);
-                res.status(400).send(stderr);
-            } else {
-                console.log(`stdout: ${stdout}`);
-                res.status(200).send(stdout);
-            }
-        });
-    }
-    else{
-        console.log(`Can't run on ${os.platform}, ${os.release}`);
-        res.sendStatus(500);
-    }
+    // execute code
+    log.add("Executing file...");
+    cp.exec(`python3 ${UPLOAD_PATH}`, (error, stdout, stderr) => {
+        if (error) {
+            log.add(`error: ${error.message }`)
+            res.status(400).send(log.createLog())
+        } else if (stderr) {
+            log.add(`stderr: ${stderr}`);
+            res.status(400).send(log.createLog())
+        } else {
+            log.add(`stdout: ${stdout}`);
+            res.status(200).send(stdout);
+        }
+    });
 });
 
 

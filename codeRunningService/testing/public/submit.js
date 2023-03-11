@@ -8,9 +8,35 @@ window.onload = () => {
     }
 }
 
-// function submit_file() {
+function submit_file() {
+    document.getElementById("output").innerHTML = ""
+    let formData = new FormData();
+    let file = $("#upload")[0].files[0];
+    formData.append("upload", file)
+    $.ajax({
+        method: "POST",
+        url: "/submit-file",
+        processData: false,  // tell jQuery not to process the data
+        contentType: false,  // tell jQuery not to set contentType
+        data: formData,
+        success: function(data) {                              
+            console.log("File is submitted");
 
-        // }
+            let results = data.split("\n")
+            localStorage.setItem("data", results.join("<br>"));
+            window.location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.error("File could not be submitted!");
+            let results = xhr.responseText.split("\n")
+            localStorage.setItem("data", results.join("<br>"));
+            window.location.reload();
+        }
+    });   
+
+
+
+}
 
 function submit_text() {
     document.getElementById("output").innerHTML = ""

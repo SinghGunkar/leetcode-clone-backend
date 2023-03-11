@@ -17,9 +17,9 @@
 </head>
 <body>
     <h2>Submit File</h2>
-    <form method="post" action="/submit-file" enctype="multipart/form-data">
+    <form id="file-form" enctype="multipart/form-data" onSubmit="return false">
         <input type="file" name="upload" id="upload"/>
-        <input type="submit" name="fileSubmit" id="fileSubmit" onclick="submit_text()">
+        <input type="submit" name="fileSubmit" id="fileSubmit" onclick="submit_file()">
     </form>
 
     <h2>Submit Text</h2>
