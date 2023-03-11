@@ -17,8 +17,8 @@ function submit_text() {
     $.ajax({
         method: "POST",
         url: "/submit-text",
-        data: "text=" + $("#text").val(),
-        success: function(data) {
+        data: "text=" + $("#text").val().replaceAll("+", "%2B"), // "+"" is a special char and needs to 
+        success: function(data) {                                // be explicitly stated with "%2B"
             console.log("File is submitted");
 
             let results = data.split("\n")

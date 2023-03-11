@@ -1,27 +1,13 @@
-const fs = require('fs');
-
-
-module.exports = class Logger {;
-    constructor(log_path){
+module.exports = class Logger {
+    constructor(){
         this.text_log = [];
-        this.log_path = log_path;
     }
-
+    // append to text_log
     add(text) {
         this.text_log.push(text + "\n");
     }
-
-    writeToLog() {
-        let file = fs.createWriteStream(this.log_path);
-        file.on('error', (err) => { 
-            console.error("ERROR: Can not write to log");
-            return false; 
-        });
-        this.text_log.forEach((line) => { 
-            file.write(line); 
-        });
-        file.end();
-        return true;
+    // stringify log message
+    createLog() {
+        return this.text_log.join("");
     }
-    
 }

@@ -16,10 +16,7 @@ const Logger = require('./Logger')
 // constants
 const app = express();
 const PUBLIC_PATH = path.join(__dirname, '/testing/public')
-const UPLOAD_PATH = path.join(__dirname, '/code/input/main.py')
-const OUTPUT_PATH = path.join(__dirname, '/code/output/out.txt')
-const LOG_PATH = path.join(__dirname, '/code/output/log.txt')
-
+const UPLOAD_PATH = path.join(__dirname, '/code/main.py')
 
 // parsing body
 app.use(express.json());
@@ -55,10 +52,11 @@ if (process.argv[2] === "1") {
  * User submits code in the form of a textarea
  */
 app.post("/submit-text", (req, res) => {
-    let log = new Logger(LOG_PATH); // list of strings to be logged in log.txt
+    let log = new Logger(); // list of strings to be logged in log.txt
     log.add("Text submission received");
 
     let text = req.body.text;
+    console.log(text)
     
     // write text code to file
     log.add("Writing text to file...");
@@ -66,7 +64,7 @@ app.post("/submit-text", (req, res) => {
         if (err) {
             log.add(err);
             // write to log and return
-            !log.writeToLog() ? res.status(500) : res.status(500).sendFile(LOG_PATH);
+            res.status(500).send(log.createLog());
             return;
         } else {
             log.add("File write successful");
@@ -77,23 +75,13 @@ app.post("/submit-text", (req, res) => {
     cp.exec(`python3 ${UPLOAD_PATH}`, (error, stdout, stderr) => {
         if (error) {
             log.add(`error: ${error.message }`)
-            // write to log and return
-            !log.writeToLog() ? res.status(500) : res.status(400).sendFile(LOG_PATH);
+            res.status(400).send(log.createLog())
         } else if (stderr) {
             log.add(`stderr: ${stderr}`);
-            // write to log and return
-            !log.writeToLog() ? res.status(500) : res.status(400).sendFile(LOG_PATH);
+            res.status(400).send(log.createLog())
         } else {
             log.add(`stdout: ${stdout}`);
-            fs.writeFile(OUTPUT_PATH, stdout, err => {
-                if (err) {
-                    log.add(err);
-                    // write to log and return
-                    !log.writeToLog() ? res.status(500) : res.status(400).sendFile(LOG_PATH);
-                } else { // no errors, send result
-                    res.status(200).sendFile(OUTPUT_PATH);
-                }  
-            });
+            res.status(200).send(stdout);
         }
     });
 });
