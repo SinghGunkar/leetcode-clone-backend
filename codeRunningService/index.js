@@ -17,6 +17,7 @@ const Logger = require('./Logger')
 const app = express();
 const PUBLIC_PATH = path.join(__dirname, '/testing/public')
 const UPLOAD_PATH = path.join(__dirname, '/code/main.py')
+const ER_PATH = path.join(__dirname, '/code/er.txt')
 
 // parsing body
 app.use(express.json());
@@ -130,6 +131,40 @@ app.post("/submit-file", (req, res) => {
 
 
 
+/**
+ * User submits expected values in a .txt file
+ */
+app.post("/expected-file", (req, res) => {
+    let log = new Logger();
+    // parse file
+    let file = req.files.upload
+    log.add("File submission received!")
+
+    if (file.name.split(".")[1] !== "txt") { // check if file is a python file
+        log.add("Expected results file must have a .txt extension")
+        res.status(400).send(log.createLog());
+        return;
+    }
+    log.add(`${file.name} file submission logged`);
+
+    // save file data to UPLOAD_PATH
+    file.mv(ER_PATH, (err) => {
+        if (err) {
+            log.add(err);
+            res.status(500).send(log.createLog());
+            return;
+        }  
+        else {
+            res.status(200).send("File uploaded");
+        } 
+    });
+});
+
+
+
+
+
+
 
 app.listen(5000, () => {
     console.log("App is running on port 5000");
@@ -137,7 +172,3 @@ app.listen(5000, () => {
 
 
 
-
-function writeToLog(text_list) {
-    return;
-}

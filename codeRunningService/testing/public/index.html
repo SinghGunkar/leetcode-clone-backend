@@ -16,6 +16,12 @@
     <title>Code Upload</title>
 </head>
 <body>
+    <h2>Expected Output File</h2>
+    <form id="expected-file-form" enctype="multipart/form-data" onSubmit="return false">
+        <input type="file" name="expected-upload" id="expected-upload"/>
+        <input type="submit" name="expectedSubmit" id="expectedSubmit" onclick="submit_expected()">
+    </form>
+
     <h2>Submit File</h2>
     <form id="file-form" enctype="multipart/form-data" onSubmit="return false">
         <input type="file" name="upload" id="upload"/>
