@@ -37,8 +37,9 @@ connect();
 
 const db = client.db('cmpt372');
 
-app.post('/codes/:qid', isLogin, async (req, res) => {
+app.post('/:uid/:qid/code', isLogin, async (req, res) => {
     const { code } = req.body;
+    const { uid } = req.params;
     const { qid } = req.params;
 
     const python = spawn('python', ['-c', code]);
@@ -57,7 +58,7 @@ app.post('/codes/:qid', isLogin, async (req, res) => {
         const collection = db.collection('codes');
 
         try {
-            const result = await collection.insertOne({ qid: qid, code, output });
+            const result = await collection.insertOne({ uid: uid, qid: qid, code, output });
             res.json({ output });
             console.log('Code saved to database:', result.insertedId);
         } catch (error) {
@@ -67,38 +68,44 @@ app.post('/codes/:qid', isLogin, async (req, res) => {
 
 });
 
-app.get('/codes/:qid', isLogin, async (req, res) => {
+app.get('/:uid/:qid/code', isLogin, async (req, res) => {
     const collection = db.collection('codes');
+    const { uid } = req.params;
     const { qid } = req.params;
 
     try {
-        const result = await collection.find({ qid: qid }).sort({ _id: -1 }).toArray();
-        res.json(result);
+        const result = await collection.find({ uid: uid, qid: qid }).sort({ _id: -1 }).toArray();
+        res.json({
+            isLogin: true,
+            output: result
+        });
     } catch (error) {
         console.error(error);
     }
 });
 
-app.get('/codes/:qid/:cid', isLogin, async (req, res) => {
+app.get('/:uid/:qid/:cid', isLogin, async (req, res) => {
     const collection = db.collection('codes');
-    const { qid } = req.params;
-    const { cid } = req.params;
-
-    try {
-        const result = await collection.findOne({ _id: new ObjectId(cid), qid: qid });
-        res.json(result);
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-app.delete('/codes/:qid/:cid', isLogin, async (req, res) => {
-    const collection = db.collection('codes');
+    const { uid } = req.params;
     const { qid } = req.params;
     const { cid } = req.params;
 
     try {
-        const result = await collection.deleteOne({ _id: new ObjectId(cid), qid: qid });
+        const result = await collection.findOne({ _id: new ObjectId(cid), uid: uid, qid: qid });
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+app.delete('/:uid/:qid/:cid', isLogin, async (req, res) => {
+    const collection = db.collection('codes');
+    const { uid } = req.params;
+    const { qid } = req.params;
+    const { cid } = req.params;
+
+    try {
+        const result = await collection.deleteOne({ _id: new ObjectId(cid), uid: uid, qid: qid });
         res.json(result);
     } catch (error) {
         console.error(error);
@@ -106,24 +113,30 @@ app.delete('/codes/:qid/:cid', isLogin, async (req, res) => {
 });
 
 
-app.get('/dashboard', isLogin, async (req, res) => {
+app.get('/:uid', isLogin, async (req, res) => {
     const collection = db.collection('questions');
 
     try {
         const result = await collection.find().toArray();
-        res.json(result);
+        res.json({
+            isLogin: true,
+            output: result
+        });
     } catch (error) {
         console.error(error);
     }
 });
 
-app.get('/question/:qid', isLogin, async (req, res) => {
+app.get('/:uid/:qid', isLogin, async (req, res) => {
     const collection = db.collection('questions');
     const { qid } = req.params;
 
     try {
         const result = await collection.findOne({ _id: new ObjectId(qid) });
-        res.json(result);
+        res.json({
+            isLogin: true,
+            output: result.question
+        });
     } catch (error) {
         console.error(error);
     }
@@ -140,10 +153,40 @@ app.post('/login', async (req, res) => {
         }
         else {
             req.session.user = user;
-            res.json({ isLogin: true });
+            res.json({
+                uid: result._id.toString(),
+                isLogin: true
+            });
         }
     } catch (error) {
+        console.error(error);
+    }
+})
+
+app.delete('/logout', async (req, res) => {
+    if (req.session) {
+        req.session.destroy();
         res.json({ isLogin: false });
+    }
+})
+
+
+app.post('/signup', async (req, res) => {
+    const collection = db.collection('users');
+    var user = req.body.user;
+    var password = req.body.password;
+
+    try {
+        const result = await collection.findOne({ user: user });
+        if (result == null) {
+            await collection.insertOne({ user, password });
+            res.json('Registration Successful')
+        }
+        else {
+            res.json('Email Address is Already Registered')
+        }
+    } catch (error) {
+        console.error(error);
     }
 })
 
