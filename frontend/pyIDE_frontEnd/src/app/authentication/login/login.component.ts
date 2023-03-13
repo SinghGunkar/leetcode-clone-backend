@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     let d = this.dialog.open(FormLoginComponent, {
       width: "50%",
-      position: {top: "15%", left: "25%"}
+      position: {top: "15%", left: "25%"},
     });
 
   }
