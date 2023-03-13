@@ -2,3 +2,32 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.input-center {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.auth-input {
+    color: black;
+    width: 90%;
+    margin: 2em;
+    padding: 0.6em;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #ccc;
+    background-color: #f8f8f8;
+}
+
+.auth-input:focus {
+    border-color: rgb(0, 200, 255);
+}
+
+.auth-form {
+    padding: 1em;
+    border: 2px solid rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

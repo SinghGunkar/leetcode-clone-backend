@@ -4,21 +4,29 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CodePanelComponent } from './code-panel/code-panel.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import { ToolbarComponent } from './toolbar/toolbar.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatDialogModule, } from '@angular/material/dialog';  // authentication view
+import { FormsModule } from '@angular/forms'; // authentication view
+
+import { CodePanelComponent } from './code-panel/code-panel.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { FormLoginComponent } from './authentication/login/form-login/form-login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CodePanelComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    LoginComponent,
+    FormLoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +38,9 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     MatDividerModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatDialogModule,      // for authentication
+    FormsModule           // for authentication
   ],
   providers: [],
   bootstrap: [AppComponent]
