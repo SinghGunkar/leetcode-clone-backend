@@ -20,7 +20,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { FormLoginComponent } from './authentication/login/form-login/form-login.component';
 import { SignupComponent } from './authentication/signup/signup.component';
-import { SignupFormComponent } from './authentication/signup/signup-form/signup-form.component';
+import { FormSignupComponent } from './authentication/signup/form-signup/form-signup.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import { SignupFormComponent } from './authentication/signup/signup-form/signup-
     LoginComponent,
     FormLoginComponent,
     SignupComponent,
-    SignupFormComponent,
+    FormSignupComponent,
   ],
   imports: [
     BrowserModule,
