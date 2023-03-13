@@ -4,18 +4,23 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CodePanelComponent } from './code-panel/code-panel.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import { ToolbarComponent } from './toolbar/toolbar.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { InputEmailComponent } from './authentication/input-email/input-email.component';
-import { InputPasswordComponent } from './authentication/input-password/input-password.component';
+import { MatDialogModule, MatDialogRef} from '@angular/material/dialog';  // authentication view
+import { FormsModule } from '@angular/forms'; // authentication view
+
+import { CodePanelComponent } from './code-panel/code-panel.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { InputEmailComponent } from './authentication/input-email/input-email.component'; // authentication view
+import { InputPasswordComponent } from './authentication/input-password/input-password.component';  // authentication view
 import { LoginComponent } from './authentication/login/login.component';
+import { FormLoginComponent } from './authentication/login/form-login/form-login.component';  // authentication view
 
 @NgModule({
   declarations: [
@@ -25,6 +30,7 @@ import { LoginComponent } from './authentication/login/login.component';
     InputEmailComponent,
     InputPasswordComponent,
     LoginComponent,
+    FormLoginComponent,
 
   ],
   imports: [
@@ -37,7 +43,9 @@ import { LoginComponent } from './authentication/login/login.component';
     MatDividerModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatDialogModule,      // for authentication
+    FormsModule           // for authentication
   ],
   providers: [],
   bootstrap: [AppComponent]
