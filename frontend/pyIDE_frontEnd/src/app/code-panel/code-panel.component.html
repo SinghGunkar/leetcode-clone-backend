@@ -1,0 +1,29 @@
+
+<mat-card class="code-panel-card">
+    <!-- <mat-card-header>
+        <mat-card-subtitle></mat-card-subtitle>
+        <mat-card-title></mat-card-title>
+    </mat-card-header> -->
+    <mat-card-content>
+        <div class="code-card-box">
+            <div id="editor" class="app-ace-editor" #editor></div>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button (click)="onSubmit()">
+            <mat-icon>play_arrow</mat-icon> RUN
+        </button>
+
+    </mat-card-actions>
+    <mat-card-footer>
+        <mat-progress-bar *ngIf="show_progress" mode="indeterminate"></mat-progress-bar>
+    </mat-card-footer>
+    <mat-card-content>
+
+        <mat-divider></mat-divider>
+        <div class="code-card-box">
+            <div #xtermTerminal class="xterm-div"></div>
+        </div>
+    </mat-card-content>
+
+</mat-card>
