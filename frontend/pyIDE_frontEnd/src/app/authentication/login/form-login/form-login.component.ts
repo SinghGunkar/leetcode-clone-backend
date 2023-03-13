@@ -8,9 +8,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-
-import { InputEmailComponent } from '../../input-email/input-email.component';
-import { InputPasswordComponent } from '../../input-password/input-password.component';
+import { Student } from '../../../models/Student'
 
 @Component({
   selector: 'app-form-login',
@@ -18,13 +16,22 @@ import { InputPasswordComponent } from '../../input-password/input-password.comp
   styleUrls: ['./form-login.component.css']
 })
 export class FormLoginComponent implements OnInit {
-    /**
+  public student!: Student;
+
+  /**
    * @param dialogRef       dialog reference from the parent component
    */
-  constructor(public dialogRef: MatDialogRef<FormLoginComponent>) {}
+  constructor(public dialogRef: MatDialogRef<FormLoginComponent>) {
+    dialogRef.disableClose = true; // prevent closing when clicking outside the dialog
+  }
 
   ngOnInit(): void {
       
+  }
+
+  public login(email: string, password: string): void {
+    this.student = new Student(email, password);
+    this.student.print()
   }
 }
 

@@ -1,7 +1,11 @@
-<form id="login">
-    <label mat-dialog-title>Login</label>
-    <app-input-email class="center"></app-input-email>
+<form class="auth-form">
+    <label mat-dialog-title>Welcome Back</label>
+    <input mat-dialog-content placeholder="email" class="input-center auth-input" type="text" required #email>
     <!-- <span class="center" *ngIf="error" style="color:red">{{ error }}</span> -->
-    <app-input-password class="center"></app-input-password>
-    <!-- <button (click)="onSave()">SAVE</button> -->
+    <input mat-dialog-content placeholder="password" class="input-center auth-input" type="password" required #password>
+    <mat-card-actions>
+        <button mat-raised-button (click)="login(email.value, password.value)">Login</button><br>
+        <button id="new-account">Create an Account</button>
+    </mat-card-actions>
 </form>
+
