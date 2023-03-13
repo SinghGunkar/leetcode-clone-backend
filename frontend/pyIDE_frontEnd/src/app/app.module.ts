@@ -13,12 +13,19 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import { InputEmailComponent } from './authentication/input-email/input-email.component';
+import { InputPasswordComponent } from './authentication/input-password/input-password.component';
+import { LoginComponent } from './authentication/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CodePanelComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    InputEmailComponent,
+    InputPasswordComponent,
+    LoginComponent,
+
   ],
   imports: [
     BrowserModule,
