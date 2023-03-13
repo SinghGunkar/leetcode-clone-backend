@@ -4,8 +4,9 @@ import { CodePanelComponent } from './code-panel/code-panel.component';
 import { LoginComponent } from './authentication/login/login.component';
 
 const routes: Routes = [
+  {path: '', component:LoginComponent},   // root path to login page
   {path: 'code', component:CodePanelComponent},
-  {path: 'login', component:LoginComponent}
+  
 ];
 
 @NgModule({
