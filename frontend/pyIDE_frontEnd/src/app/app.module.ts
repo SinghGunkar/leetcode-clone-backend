@@ -57,7 +57,7 @@ import { FormSignupComponent } from './authentication/signup/form-signup/form-si
     MatToolbarModule,
 
     MatTabsModule,
-    MatTableModule
+    MatTableModule,
     MatDialogModule,      // for authentication
     FormsModule           // for authentication
 
