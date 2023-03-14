@@ -2,10 +2,10 @@
  * form-login.component.ts
  * Alvin Tsang
  * 
- * form for signup page
+ * Logic for the sign up page
  * 
  */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { Student } from '../../../models/Student'
@@ -16,7 +16,7 @@ import { Student } from '../../../models/Student'
 })
 export class FormSignupComponent {
   private student!: Student;
-  public errorMsg!: string;
+  public errorMsg!: string; // display errors to the user
 
 
   /**
@@ -27,12 +27,10 @@ export class FormSignupComponent {
     this.errorMsg = "";
   }
 
-  ngOnInit(): void {
-      
-  }
+  ngOnInit(): void {}
 
   /**
-   * 
+   * Perform data validation and submit. If all inputs are valid, redirect to the dashboard
    * @param email     existing student's email
    * @param password  existing student's password 
    * @returns n/a
@@ -59,7 +57,7 @@ export class FormSignupComponent {
     this.student = new Student(email, password);
     
     // check that the student exists in the database
-    let isValidStudent = true; // for connecting to the db
+    let isValidStudent: boolean = true; // for connecting to the db
     
     if (!isValidStudent) {      // not a valid student
       this.errorMsg = "No student found, try creating an account first before logging in";
@@ -67,25 +65,22 @@ export class FormSignupComponent {
       // redirect to dashboard
       console.log("Redirecting to dashboard...")
     }
-
   }
 
   /**
-   * 
-   * @param email string of the student's email
-   * 
    * Check that the email is of sfu domain
+   * @param email string of the student's email
    */
   private validDomain(email: string): boolean {
     const sfuDomain: string = "@sfu.ca";
-    let emailDomain = email.substring(email.length - sfuDomain.length, email.length);
+    let emailDomain: string = email.substring(email.length - sfuDomain.length, email.length);
     return sfuDomain === emailDomain;
   }
 
+  /**
+   * Redirect the user to the login page
+   */
   public toLogin(): void {
     console.log("Redirecting to login page...");
   }
-
-
-
 } // end of class FormSignupComponent

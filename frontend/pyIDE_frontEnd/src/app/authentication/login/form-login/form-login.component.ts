@@ -2,7 +2,7 @@
  * form-login.component.ts
  * Alvin Tsang
  * 
- * form for login page
+ * Logic for the login page
  * 
  */
 import { Component, OnInit } from '@angular/core';
@@ -28,12 +28,10 @@ export class FormLoginComponent implements OnInit {
     this.errorMsg = "";
   }
 
-  ngOnInit(): void {
-      
-  }
+  ngOnInit(): void {}
 
   /**
-   * 
+   * Perform data validation and submit. If all inputs are valid, redirect to the dashboard
    * @param email     existing student's email
    * @param password  existing student's password 
    * @returns n/a
@@ -54,7 +52,7 @@ export class FormLoginComponent implements OnInit {
     this.student = new Student(email, password);
     
     // check that the student exists in the database
-    let isValidStudent = true; // for connecting to the db
+    let isValidStudent: boolean = true; // for connecting to the db
     
     if (!isValidStudent) {      // not a valid student
       this.errorMsg = "No student found, try creating an account first before logging in";
@@ -62,25 +60,24 @@ export class FormLoginComponent implements OnInit {
       // redirect to dashboard
       console.log("Redirecting to dashboard...")
     }
-
   }
 
   /**
-   * 
-   * @param email string of the student's email
-   * 
    * Check that the email is of sfu domain
+   * @param email string of the student's email
    */
   private validDomain(email: string): boolean {
     const sfuDomain: string = "@sfu.ca";
-    let emailDomain = email.substring(email.length - sfuDomain.length, email.length);
+    let emailDomain: string = email.substring(email.length - sfuDomain.length, email.length);
     return sfuDomain === emailDomain;
   }
 
+  /**
+   * Rediect the page to the sign up page
+   */
   public toSignUp(): void {
     console.log("Redirecting to sign up page...");
   }
-
 
 } // end of FormLoginComponent
 

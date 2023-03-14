@@ -1,3 +1,10 @@
+/**
+ * form-login.component.ts
+ * Alvin Tsang
+ * 
+ * Sign up page with a dialog to sign up with
+ * 
+ */
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -8,11 +15,9 @@ import { FormSignupComponent } from './form-signup/form-signup.component';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
   
-  constructor(public dialog: MatDialog) {
-
-  }
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
     let d = this.dialog.open(FormSignupComponent, {
@@ -21,4 +26,4 @@ export class SignupComponent {
     });
 
   }
-}
+} // end of class SignupComponent

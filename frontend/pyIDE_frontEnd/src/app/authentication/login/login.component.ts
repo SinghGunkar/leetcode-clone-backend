@@ -1,3 +1,11 @@
+/**
+ * form-login.component.ts
+ * Alvin Tsang
+ * 
+ * Login up page with a dialog to login up with
+ * 
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -11,15 +19,12 @@ import { FormLoginComponent } from './form-login/form-login.component';
 export class LoginComponent implements OnInit {
 
 
-  constructor(public dialog: MatDialog) {
-
-  }
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
     let d = this.dialog.open(FormLoginComponent, {
       width: "50%",
       position: {top: "15%", left: "25%"},
     });
-
   }
-}
+} // end of LoginComponent
