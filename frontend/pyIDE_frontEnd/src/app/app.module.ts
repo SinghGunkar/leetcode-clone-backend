@@ -12,6 +12,14 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
+
+import { QuestionComponent } from './question/question.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ListQuestionsComponent } from './list-questions/list-questions.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatTableModule} from '@angular/material/table';
+
+
 import { MatDialogModule, } from '@angular/material/dialog';  // authentication view
 import { FormsModule } from '@angular/forms'; // authentication view
 
@@ -22,11 +30,15 @@ import { FormLoginComponent } from './authentication/login/form-login/form-login
 import { SignupComponent } from './authentication/signup/signup.component';
 import { FormSignupComponent } from './authentication/signup/form-signup/form-signup.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     CodePanelComponent,
     ToolbarComponent,
+    QuestionComponent,
+    DashboardComponent,
+    ListQuestionsComponent,
     LoginComponent,
     FormLoginComponent,
     SignupComponent,
@@ -43,8 +55,12 @@ import { FormSignupComponent } from './authentication/signup/form-signup/form-si
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+
+    MatTabsModule,
+    MatTableModule,
     MatDialogModule,      // for authentication
     FormsModule           // for authentication
+
   ],
   providers: [],
   bootstrap: [AppComponent]
