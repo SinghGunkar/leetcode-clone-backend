@@ -2,28 +2,27 @@
  * form-login.component.ts
  * Alvin Tsang
  * 
- * Logic for the login page
+ * Logic for the sign up page
  * 
  */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { Student } from '../../../models/Student'
-
 @Component({
-  selector: 'app-form-login',
-  templateUrl: './form-login.component.html',
-  styleUrls: ['./form-login.component.css']
+  selector: 'app-form-signup',
+  templateUrl: './form-signup.component.html',
+  styleUrls: ['./form-signup.component.css']
 })
-export class FormLoginComponent implements OnInit {
+export class FormSignupComponent {
   private student!: Student;
-  public errorMsg!: string;
+  public errorMsg!: string; // display errors to the user
 
 
   /**
    * @param dialogRef       dialog reference from the parent component
    */
-  constructor(public dialogRef: MatDialogRef<FormLoginComponent>) {
+  constructor(public dialogRef: MatDialogRef<FormSignupComponent>) {
     dialogRef.disableClose = true; // prevent closing when clicking outside the dialog
     this.errorMsg = "";
   }
@@ -36,15 +35,21 @@ export class FormLoginComponent implements OnInit {
    * @param password  existing student's password 
    * @returns n/a
    */
-  public login(email: string, password: string): void {
+  public signup(email: string, password: string, confirmPassword: string): void {
     // input fields can not be empty
-    if (email.length == 0 || password.length == 0) {
+    if (email.length == 0 || password.length == 0 || confirmPassword.length == 0) {
       this.errorMsg = "Invalid email or password"; 
       return;     
     }
     // email must be of sfu domain    
     if (!this.validDomain(email)) {
       this.errorMsg = "Email must be of SFU domain";
+      return;
+    }
+
+    // password and confirmPassword must match
+    if (password !== confirmPassword) {
+      this.errorMsg = "Passwords do not match!";
       return;
     }
 
@@ -73,14 +78,9 @@ export class FormLoginComponent implements OnInit {
   }
 
   /**
-   * Rediect the page to the sign up page
+   * Redirect the user to the login page
    */
-  public toSignUp(): void {
-    console.log("Redirecting to sign up page...");
+  public toLogin(): void {
+    console.log("Redirecting to login page...");
   }
-
-} // end of FormLoginComponent
-
-
-
-
+} // end of class FormSignupComponent
