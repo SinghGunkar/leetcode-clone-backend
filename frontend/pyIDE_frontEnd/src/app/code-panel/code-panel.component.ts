@@ -61,7 +61,7 @@ export class CodePanelComponent {
 
     this.term.loadAddon(this.fitAddon);
     this.term.open(this.terminalDiv.nativeElement);
-    this.term.writeln('Result:');
+    this.term.writeln('Click run to see result:');
 
     this.fitAddon.fit();
   }
@@ -87,12 +87,12 @@ export class CodePanelComponent {
       this.term.clear();
       console.log(this.formatString(data.returnValue))//
       this.term.write(`${this.formatString(data.returnValue)}`)
-      this.term.onKey(e => {
-        console.log(e.key);
-        // this.term.write(e.key);
-        // if (e.key == '\r')
-        //   this.term.write('\n');
-      })
+      // this.term.onKey(e => {
+      //   console.log(e.key);
+      //   this.term.write(e.key);
+      //   if (e.key == '\r')
+      //     this.term.write('\n');
+      // })
       this.show_progress = false;
       return
     })
