@@ -77,6 +77,7 @@ export class FormLoginComponent implements OnInit {
    */
   public toSignUp(): void {
     console.log("Redirecting to sign up page...");
+    this.dialogRef.close()
   }
 
 } // end of FormLoginComponent

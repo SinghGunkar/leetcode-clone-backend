@@ -82,5 +82,6 @@ export class FormSignupComponent {
    */
   public toLogin(): void {
     console.log("Redirecting to login page...");
+    this.dialogRef.close()
   }
 } // end of class FormSignupComponent
