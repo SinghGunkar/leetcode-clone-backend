@@ -1,11 +1,11 @@
-#to-login {
+p {
     font-size: 0.8em;
     margin: 0.5em;
     border:none;
     background-color: inherit;
 }
 
-#to-login:hover {
+p:hover {
     cursor: pointer;
     color: rgb(0, 200, 255);
 }

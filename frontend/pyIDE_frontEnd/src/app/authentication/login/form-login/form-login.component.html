@@ -5,7 +5,7 @@
     <input mat-dialog-content placeholder="password" class="input-center auth-input" type="password" required #password>
     <mat-card-actions>
         <button mat-raised-button (click)="login(email.value, password.value)">Login</button><br>
-        <button id="new-account" (click)="toSignUp()">Create an account</button>
+        <p routerLink="/signup">Create an account here</p>
     </mat-card-actions>
 </form>
 
