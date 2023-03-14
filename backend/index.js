@@ -2,6 +2,11 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const { spawn } = require("child_process")
 const session = require("express-session")
+const {
+    hashPassword,
+    comparePassword,
+    comparePasswordToHashedPassword
+} = require("./bcrypt/password-hash-helpers")
 
 const MongoClient = require("mongodb").MongoClient
 const ObjectId = require("mongodb").ObjectId
@@ -166,16 +171,30 @@ app.post("/login", async (req, res) => {
     var user = req.body.user
     var password = req.body.password
     try {
-        const result = await collection.findOne({ user: user, password: password })
+        const result = await collection.findOne({ user: user })
+
+        // user does not exist
         if (result == null) {
-            res.json({ isLogin: false })
-        } else {
-            req.session.user = user
-            res.json({
-                uid: result._id.toString(),
-                isLogin: true
-            })
+            res.json({ message: "invalid username or password", isLogin: false })
+            return
         }
+
+        const passwordMatch = await comparePasswordToHashedPassword(
+            password,
+            result.password
+        )
+
+        // user exists but invalid password was given
+        if (!passwordMatch) {
+            res.json({ message: "invalid password", isLogin: false })
+            return
+        }
+
+        req.session.user = user
+        res.json({
+            uid: result._id.toString(),
+            isLogin: true
+        })
     } catch (error) {
         console.error(error)
     }
@@ -201,7 +220,12 @@ app.post("/signup", async (req, res) => {
     try {
         const result = await collection.findOne({ user: user })
         if (result == null) {
-            await collection.insertOne({ user, password, type: "student" })
+            const hashedPassword = await hashPassword(password)
+            await collection.insertOne({
+                user,
+                password: hashedPassword,
+                type: "student"
+            })
             res.json("Registration Successful")
         } else {
             res.json("Email Address is Already Registered")
