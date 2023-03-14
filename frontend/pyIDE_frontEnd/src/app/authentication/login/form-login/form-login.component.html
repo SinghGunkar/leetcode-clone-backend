@@ -1,0 +1,11 @@
+<form class="auth-form">
+    <label mat-dialog-title>Welcome Back</label>
+    <input mat-dialog-content placeholder="email" class="input-center auth-input" type="text" required #email>
+    <span class="center" *ngIf="errorMsg" style="color:red">{{ errorMsg }}</span>
+    <input mat-dialog-content placeholder="password" class="input-center auth-input" type="password" required #password>
+    <mat-card-actions>
+        <button mat-raised-button (click)="login(email.value, password.value)">Login</button><br>
+        <p routerLink="/signup" (click)="toSignUp()">Create an account here</p>
+    </mat-card-actions>
+</form>
+
