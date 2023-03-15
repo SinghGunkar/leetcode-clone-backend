@@ -4,9 +4,10 @@ const { spawn } = require("child_process")
 const session = require("express-session")
 const {
     hashPassword,
-    comparePassword,
     comparePasswordToHashedPassword
 } = require("./bcrypt/password-hash-helpers")
+
+const { isLogin } = require("./middleware/isLogin")
 
 const MongoClient = require("mongodb").MongoClient
 const ObjectId = require("mongodb").ObjectId
@@ -192,7 +193,7 @@ app.post("/login", async (req, res) => {
 
         req.session.user = user
         res.json({
-            uid: result._id.toString(),
+            dataFromServer: result,
             isLogin: true
         })
     } catch (error) {
@@ -234,14 +235,6 @@ app.post("/signup", async (req, res) => {
         console.error(error)
     }
 })
-
-function isLogin(req, res, next) {
-    if (req.session.user) {
-        return next()
-    } else {
-        res.json({ isLogin: false })
-    }
-}
 
 const PORT = process.env.PORT || 8000
 
