@@ -1,0 +1,23 @@
+@import url('https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css');
+
+.app-ace-editor{
+    width: 100%;
+    height: 250px;
+}
+/* 
+.code-panel-card{
+
+} */
+
+.xterm-div{
+    width:100%;
+    height:300px;
+}
+
+.code-card-box{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.run-button {
+    color:#00ff3c;
+}
