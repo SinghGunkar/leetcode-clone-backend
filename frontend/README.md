@@ -25,3 +25,12 @@ On a successful sign up, the user will be redirected to the dashboard and their 
 * Confirmation Password field must not be empty
 * Password and Confirmation Password must match exactly
 * Email and password must not map to a user already in the database <mark>TO DO</mark>
+
+
+# Test username and passwords
+
+username: 1
+password: 2
+
+username: 2
+password: 4
