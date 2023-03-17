@@ -18,6 +18,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ListQuestionsComponent } from './list-questions/list-questions.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTableModule} from '@angular/material/table';
+import {MatInputModule} from '@angular/material/input';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 
 import { MatDialogModule, } from '@angular/material/dialog';  // authentication view
@@ -55,11 +57,12 @@ import { FormSignupComponent } from './authentication/signup/form-signup/form-si
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
-
+    MatInputModule,
     MatTabsModule,
     MatTableModule,
     MatDialogModule,      // for authentication
-    FormsModule           // for authentication
+    FormsModule,           // for authentication
+    MatGridListModule
 
   ],
   providers: [],
