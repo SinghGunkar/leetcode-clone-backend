@@ -71,13 +71,13 @@ app.post("/runCode", isLogin, async (req, res) => {
 
         try {
             const result = await collection.insertOne({
-                uid: uid,
-                qid: qid,
+                uid,
+                qid,
                 code,
                 output
             })
             res.json({ output })
-            console.log("Code saved to database:", result.insertedId)
+
         } catch (error) {
             console.error(error)
         }
@@ -91,7 +91,7 @@ app.get("/getCodes", isLogin, async (req, res) => {
 
     try {
         const result = await collection
-            .find({ uid: uid, qid: qid })
+            .find({ uid, qid })
             .sort({ _id: -1 })
             .toArray()
         res.json({
@@ -112,8 +112,8 @@ app.get("/getOneCode", isLogin, async (req, res) => {
     try {
         const result = await collection.findOne({
             _id: new ObjectId(cid),
-            uid: uid,
-            qid: qid
+            uid,
+            qid
         })
         res.json(result)
     } catch (error) {
@@ -130,8 +130,8 @@ app.delete("/deleteCode", isLogin, async (req, res) => {
     try {
         const result = await collection.deleteOne({
             _id: new ObjectId(cid),
-            uid: uid,
-            qid: qid
+            uid,
+            qid
         })
         res.json(result)
     } catch (error) {
@@ -161,7 +161,7 @@ app.get("/getOneQuestion", isLogin, async (req, res) => {
         const result = await collection.findOne({ _id: new ObjectId(qid) })
         res.json({
             isLogin: true,
-            output: result.question
+            output: result
         })
     } catch (error) {
         console.error(error)
@@ -170,8 +170,8 @@ app.get("/getOneQuestion", isLogin, async (req, res) => {
 
 app.post("/login", async (req, res) => {
     const collection = db.collection("users")
-    var { user } = req.body
-    var { password } = req.body
+    const { user } = req.body
+    const { password } = req.body
     try {
         const result = await collection.findOne({ user: user })
 
@@ -211,8 +211,8 @@ app.delete("/logout", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
     const collection = db.collection("users")
-    var user = req.body.user
-    var password = req.body.password
+    const { user } = req.body
+    const { password } = req.body
 
     if (!user.endsWith("@sfu.ca")) {
         res.json("Email must end with @sfu.ca")
