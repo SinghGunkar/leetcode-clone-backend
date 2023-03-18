@@ -12,6 +12,7 @@ const { isLogin } = require("./middleware/isLogin")
 const MongoClient = require("mongodb").MongoClient
 const ObjectId = require("mongodb").ObjectId
 const uri = `mongodb+srv://root:root@cluster0.ssjdrmy.mongodb.net/?retryWrites=true&w=majority`
+
 const userName = "cmpt_372"
 const password = "Password123"
 const testingURI = `mongodb+srv://${userName}:${password}@cmput-372.zarzqam.mongodb.net/?retryWrites=true&w=majority`
@@ -30,7 +31,7 @@ app.use(
     })
 )
 
-const client = new MongoClient(testingURI, {
+const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -48,10 +49,10 @@ connect()
 
 const db = client.db("cmpt372")
 
-app.post("/:uid/:qid/code", isLogin, async (req, res) => {
+app.post("/runCode", isLogin, async (req, res) => {
     const { code } = req.body
-    const { uid } = req.params
-    const { qid } = req.params
+    const { uid } = req.body
+    const { qid } = req.body
 
     const python = spawn("python", ["-c", code])
 
@@ -83,10 +84,10 @@ app.post("/:uid/:qid/code", isLogin, async (req, res) => {
     })
 })
 
-app.get("/:uid/:qid/code", isLogin, async (req, res) => {
+app.get("/getCodes", isLogin, async (req, res) => {
     const collection = db.collection("codes")
-    const { uid } = req.params
-    const { qid } = req.params
+    const { uid } = req.body
+    const { qid } = req.body
 
     try {
         const result = await collection
@@ -102,11 +103,11 @@ app.get("/:uid/:qid/code", isLogin, async (req, res) => {
     }
 })
 
-app.get("/:uid/:qid/:cid", isLogin, async (req, res) => {
+app.get("/getOneCode", isLogin, async (req, res) => {
     const collection = db.collection("codes")
-    const { uid } = req.params
-    const { qid } = req.params
-    const { cid } = req.params
+    const { uid } = req.body
+    const { qid } = req.body
+    const { cid } = req.body
 
     try {
         const result = await collection.findOne({
@@ -120,11 +121,11 @@ app.get("/:uid/:qid/:cid", isLogin, async (req, res) => {
     }
 })
 
-app.delete("/:uid/:qid/:cid", isLogin, async (req, res) => {
+app.delete("/deleteCode", isLogin, async (req, res) => {
     const collection = db.collection("codes")
-    const { uid } = req.params
-    const { qid } = req.params
-    const { cid } = req.params
+    const { uid } = req.body
+    const { qid } = req.body
+    const { cid } = req.body
 
     try {
         const result = await collection.deleteOne({
@@ -138,7 +139,7 @@ app.delete("/:uid/:qid/:cid", isLogin, async (req, res) => {
     }
 })
 
-app.get("/:uid", isLogin, async (req, res) => {
+app.get("/dashboard", isLogin, async (req, res) => {
     const collection = db.collection("questions")
 
     try {
@@ -152,9 +153,9 @@ app.get("/:uid", isLogin, async (req, res) => {
     }
 })
 
-app.get("/:uid/:qid", isLogin, async (req, res) => {
+app.get("/getOneQuestion", isLogin, async (req, res) => {
     const collection = db.collection("questions")
-    const { qid } = req.params
+    const { qid } = req.body
 
     try {
         const result = await collection.findOne({ _id: new ObjectId(qid) })
@@ -169,8 +170,8 @@ app.get("/:uid/:qid", isLogin, async (req, res) => {
 
 app.post("/login", async (req, res) => {
     const collection = db.collection("users")
-    var user = req.body.user
-    var password = req.body.password
+    var { user } = req.body
+    var { password } = req.body
     try {
         const result = await collection.findOne({ user: user })
 
@@ -193,7 +194,7 @@ app.post("/login", async (req, res) => {
 
         req.session.user = user
         res.json({
-            dataFromServer: result,
+            uid: result._id,
             isLogin: true
         })
     } catch (error) {
