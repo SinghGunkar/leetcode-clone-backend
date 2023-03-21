@@ -1,8 +1,7 @@
 @import url('https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css');
 /* @import "../../../node_modules/xterm/css/xterm.css"; */
 /* @import "xterm.css"; */
-
-
+/* above code may replace later */
 
 .app-ace-editor {
   width: 100%;

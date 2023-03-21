@@ -21,7 +21,6 @@ import {MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatGridListModule} from '@angular/material/grid-list';
 
-
 import { MatDialogModule, } from '@angular/material/dialog';  // authentication view
 import { FormsModule } from '@angular/forms'; // authentication view
 
@@ -31,7 +30,10 @@ import { LoginComponent } from './authentication/login/login.component';
 import { FormLoginComponent } from './authentication/login/form-login/form-login.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { FormSignupComponent } from './authentication/signup/form-signup/form-signup.component';
+import { QuestionEditorComponent } from './question-editor/question-editor.component';
 
+import { QuillModule } from 'ngx-quill'
+import { QuillConfigModule } from 'ngx-quill/config';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,7 @@ import { FormSignupComponent } from './authentication/signup/form-signup/form-si
     FormLoginComponent,
     SignupComponent,
     FormSignupComponent,
+    QuestionEditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,8 +65,14 @@ import { FormSignupComponent } from './authentication/signup/form-signup/form-si
     MatTableModule,
     MatDialogModule,      // for authentication
     FormsModule,           // for authentication
-    MatGridListModule
-
+    MatGridListModule,
+    QuillModule.forRoot(),
+    QuillConfigModule.forRoot({
+      modules: {
+        syntax: true
+      }
+    })
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

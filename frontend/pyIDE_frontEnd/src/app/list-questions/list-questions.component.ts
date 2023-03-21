@@ -1,6 +1,5 @@
 import { QuestionServiceService } from './../question-service.service';
 import { Component, OnInit } from '@angular/core';
-
 import { Router } from '@angular/router';
 import { AbstractControl, FormControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
@@ -9,10 +8,13 @@ import { AbstractControl, FormControl, FormBuilder, FormGroup, ValidationErrors,
   templateUrl: './list-questions.component.html',
   styleUrls: ['./list-questions.component.css']
 })
+
+/**
+ * this component is used to display and all questions at the dashboard
+ */
 export class ListQuestionsComponent {
   
   questionList: any[];
-
 
   constructor (private questionService: QuestionServiceService,private router: Router, private fb: FormBuilder){
     this.questionList = [];
@@ -26,8 +28,4 @@ export class ListQuestionsComponent {
   }
 
   displayedColumns: string[] = [ 'title', 'id'];
-  // dataSource = ELEMENT_DATA;
-
-
-
 }

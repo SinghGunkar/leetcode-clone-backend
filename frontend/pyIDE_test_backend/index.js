@@ -162,8 +162,8 @@ app.post('/postCodeR', (req, res) => {
     });
 })
 
-app.post('/test', (req, res) => {
-    res.send(req.body);
+app.get('/test', (req, res) => {
+    res.send('test');
 })
 app.post('/ping', function (req, res) {
     res.send(req.body)

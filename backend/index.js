@@ -1,6 +1,8 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const { spawn } = require("child_process")
+const PYTHON = process.env.PYTHON || 'python';
+
 const session = require("express-session")
 const {
     hashPassword,
@@ -12,7 +14,6 @@ const { isLogin } = require("./middleware/isLogin")
 const MongoClient = require("mongodb").MongoClient
 const ObjectId = require("mongodb").ObjectId
 const uri = `mongodb+srv://root:root@cluster0.ssjdrmy.mongodb.net/?retryWrites=true&w=majority`
-
 const userName = "cmpt_372"
 const password = "Password123"
 const testingURI = `mongodb+srv://${userName}:${password}@cmput-372.zarzqam.mongodb.net/?retryWrites=true&w=majority`
@@ -30,6 +31,15 @@ app.use(
         saveUninitialized: true
     })
 )
+
+//CORS setting
+const cors = require('cors');
+const { send } = require("process");
+const e = require("express");
+
+app.use(cors({
+    origin: '*'
+}));
 
 const client = new MongoClient(uri, {
     useNewUrlParser: true,
@@ -71,13 +81,13 @@ app.post("/runCode", isLogin, async (req, res) => {
 
         try {
             const result = await collection.insertOne({
-                uid,
-                qid,
+                uid: uid,
+                qid: qid,
                 code,
                 output
             })
             res.json({ output })
-
+            console.log("Code saved to database:", result.insertedId)
         } catch (error) {
             console.error(error)
         }
@@ -91,7 +101,7 @@ app.get("/getCodes", isLogin, async (req, res) => {
 
     try {
         const result = await collection
-            .find({ uid, qid })
+            .find({ uid: uid, qid: qid })
             .sort({ _id: -1 })
             .toArray()
         res.json({
@@ -112,8 +122,8 @@ app.get("/getOneCode", isLogin, async (req, res) => {
     try {
         const result = await collection.findOne({
             _id: new ObjectId(cid),
-            uid,
-            qid
+            uid: uid,
+            qid: qid
         })
         res.json(result)
     } catch (error) {
@@ -130,8 +140,8 @@ app.delete("/deleteCode", isLogin, async (req, res) => {
     try {
         const result = await collection.deleteOne({
             _id: new ObjectId(cid),
-            uid,
-            qid
+            uid: uid,
+            qid: qid
         })
         res.json(result)
     } catch (error) {
@@ -139,7 +149,7 @@ app.delete("/deleteCode", isLogin, async (req, res) => {
     }
 })
 
-app.get("/dashboard", isLogin, async (req, res) => {
+app.get("/getAllQuestion", isLogin, async (req, res) => {
     const collection = db.collection("questions")
 
     try {
@@ -153,15 +163,20 @@ app.get("/dashboard", isLogin, async (req, res) => {
     }
 })
 
-app.get("/getOneQuestion", isLogin, async (req, res) => {
+app.get("/getOneQuestion/:qid", isLogin, async (req, res) => {
+    let qid = req.params.qid
+    console.log(req.params)
     const collection = db.collection("questions")
-    const { qid } = req.body
-
+    // const { qid } = req.body
+    if(!qid){
+        return res.end("qid is empty")
+    }
+ 
     try {
         const result = await collection.findOne({ _id: new ObjectId(qid) })
         res.json({
             isLogin: true,
-            output: result
+            output: result.question
         })
     } catch (error) {
         console.error(error)
@@ -170,8 +185,8 @@ app.get("/getOneQuestion", isLogin, async (req, res) => {
 
 app.post("/login", async (req, res) => {
     const collection = db.collection("users")
-    const { user } = req.body
-    const { password } = req.body
+    var { user } = req.body
+    var { password } = req.body
     try {
         const result = await collection.findOne({ user: user })
 
@@ -211,8 +226,8 @@ app.delete("/logout", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
     const collection = db.collection("users")
-    const { user } = req.body
-    const { password } = req.body
+    var user = req.body.user
+    var password = req.body.password
 
     if (!user.endsWith("@sfu.ca")) {
         res.json("Email must end with @sfu.ca")
@@ -236,6 +251,52 @@ app.post("/signup", async (req, res) => {
         console.error(error)
     }
 })
+
+
+
+
+app.post('/postCode', (req, res) => {
+    let code = req.body.code;
+    let stdin = req.body.stdin;
+    let send_json_data = new Object();
+    let outputString = "";
+    try {
+        var dataToSend;
+        // spawn new child process to call the python script
+        const python = spawn(PYTHON, ["-c", code.toString()]);
+        // collect data from script
+        python.stdout.on('data', function (data) {
+            console.log('Pipe data from python script ...');
+            dataToSend = data.toString();
+            console.log('stdout: ' + data);
+            send_json_data.returnValue = data.toString();
+            res.write(JSON.stringify(send_json_data));
+        });
+        python.stderr.on('data', function (err) {
+            console.log('stderr:' + err);
+            dataToSend = err.toString();
+            send_json_data.returnValue = err.toString();
+            res.send(JSON.stringify(send_json_data));
+        });
+        python.on('close', (code) => {
+            console.log(`child process close all stdio with code = ${code}`);
+            python.stderr.on('data', err => {
+                console.log('stderr:' + err);
+                dataToSend = err.toString();
+                send_json_data.returnValue = err.toString();
+                res.write(JSON.stringify(send_json_data));
+                res.end();
+            })
+            res.end();
+        });
+    } catch (error) {
+        console.log('stderr:' + error);
+        dataToSend = error.toString();
+        send_json_data.returnValue = error.toString();
+        res.send(JSON.stringify(send_json_data));
+    }
+})
+
 
 const PORT = process.env.PORT || 8000
 
