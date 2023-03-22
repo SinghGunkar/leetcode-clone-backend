@@ -19,16 +19,12 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors())
 
-// Dev logging middleware
+// development logging middleware
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"))
 }
 
-if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"))
-}
-
-// Mount routers
+// mount routers
 app.use("/authentication", authRoutes)
 
 app.use(errorHandler)
@@ -45,6 +41,5 @@ const server = app.listen(
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
     console.log(`Error: ${err.message}`.red)
-    // Close server & exit process
     server.close(() => process.exit(1))
 })

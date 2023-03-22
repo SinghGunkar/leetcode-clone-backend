@@ -13,7 +13,6 @@ exports.signUp = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse("Email already in use", 401))
     }
 
-    // Create user
     const newUser = await User.create({
         email,
         password
@@ -29,7 +28,6 @@ exports.login = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse("Please provide an email and password", 400))
     }
 
-    // Check for user
     const user = await User.findOne({ email }).select("+password")
 
     if (!user) {
@@ -58,8 +56,6 @@ exports.logout = asyncHandler(async (req, res, next) => {
 })
 
 exports.getLoggedInUser = asyncHandler(async (req, res, next) => {
-    console.log(req.params.userEmail)
-
     const user = await User.find({ email: req.params.userEmail })
 
     res.status(200).json({
@@ -70,7 +66,6 @@ exports.getLoggedInUser = asyncHandler(async (req, res, next) => {
 
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
-    // Create token
     const token = user.getSignedJwtToken()
 
     const options = {
