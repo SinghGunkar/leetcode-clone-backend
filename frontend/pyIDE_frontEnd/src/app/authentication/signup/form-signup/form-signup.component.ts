@@ -7,22 +7,26 @@
  */
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
-import { Student } from '../../../models/Student'
+import { Student } from '../../../models/Student';
+import { ServerApiATService } from 'src/app/services/server-api-at.service';
+
 @Component({
   selector: 'app-form-signup',
   templateUrl: './form-signup.component.html',
   styleUrls: ['./form-signup.component.css']
 })
 export class FormSignupComponent {
-  private student!: Student;
   public errorMsg!: string; // display errors to the user
 
 
   /**
    * @param dialogRef       dialog reference from the parent component
    */
-  constructor(public dialogRef: MatDialogRef<FormSignupComponent>) {
+  constructor(public dialogRef: MatDialogRef<FormSignupComponent>, 
+            private server_api_at: ServerApiATService,
+            private router: Router) {
     dialogRef.disableClose = true; // prevent closing when clicking outside the dialog
     this.errorMsg = "";
   }
@@ -33,14 +37,16 @@ export class FormSignupComponent {
    * Perform data validation and submit. If all inputs are valid, redirect to the dashboard
    * @param email     existing student's email
    * @param password  existing student's password 
-   * @returns n/a
+   * @returns n/a     redirect the user to the login in page if successful, display
+   *                  an error message otherwise
    */
   public signup(email: string, password: string, confirmPassword: string): void {
     // input fields can not be empty
-    if (email.length == 0 || password.length == 0 || confirmPassword.length == 0) {
+    if (email.length === 0 || password.length === 0 || confirmPassword.length === 0) {
       this.errorMsg = "Invalid email or password"; 
       return;     
     }
+
     // email must be of sfu domain    
     if (!this.validDomain(email)) {
       this.errorMsg = "Email must be of SFU domain";
@@ -54,17 +60,19 @@ export class FormSignupComponent {
     }
 
     // login is valid
-    this.student = new Student(email, password);
-    
-    // check that the student exists in the database
-    let isValidStudent: boolean = true; // for connecting to the db
-    
-    if (!isValidStudent) {      // not a valid student
-      this.errorMsg = "No student found, try creating an account first before logging in";
-    } else {  // valid student
-      // redirect to dashboard
-      console.log("Redirecting to dashboard...")
-    }
+    this.server_api_at.signup(email, password).subscribe(data => {
+      // email already exists
+      if (data.localeCompare("Email Address is Already Registered") === 0) {
+        this.errorMsg = "Email Address is Already Registered!";
+        return;
+      }
+      // creating a new account
+      if (data.localeCompare("Registration Successful") === 0) {
+        console.log("Redirecting to login...");
+        this.router.navigate(['']);
+        this.dialogRef.close();
+      }
+    })
   }
 
   /**

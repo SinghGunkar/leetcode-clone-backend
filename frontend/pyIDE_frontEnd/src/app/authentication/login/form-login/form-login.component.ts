@@ -7,8 +7,9 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
-import { Student } from '../../../models/Student'
+import { ServerApiATService } from 'src/app/services/server-api-at.service';
 
 @Component({
   selector: 'app-form-login',
@@ -16,14 +17,16 @@ import { Student } from '../../../models/Student'
   styleUrls: ['./form-login.component.css']
 })
 export class FormLoginComponent implements OnInit {
-  private student!: Student;
+  // private student!: Student;
   public errorMsg!: string;
 
 
   /**
    * @param dialogRef       dialog reference from the parent component
    */
-  constructor(public dialogRef: MatDialogRef<FormLoginComponent>) {
+  constructor(public dialogRef: MatDialogRef<FormLoginComponent>, 
+            private server_api_at: ServerApiATService, 
+            private router: Router) {
     dialogRef.disableClose = true; // prevent closing when clicking outside the dialog
     this.errorMsg = "";
   }
@@ -48,18 +51,19 @@ export class FormLoginComponent implements OnInit {
       return;
     }
 
-    // login is valid
-    this.student = new Student(email, password);
     
-    // check that the student exists in the database
-    let isValidStudent: boolean = true; // for connecting to the db
-    
-    if (!isValidStudent) {      // not a valid student
-      this.errorMsg = "No student found, try creating an account first before logging in";
-    } else {  // valid student
-      // redirect to dashboard
-      console.log("Redirecting to dashboard...")
-    }
+    // login is valid, check the database
+    this.server_api_at.login(email, password).subscribe(data => {
+      // invalid login
+      if (!data.isLogin) {
+        this.errorMsg = data.message;
+      } else {  // login success, redirect to dashboard
+        console.log("Redirect to dashboard")
+        this.router.navigate(['/dashboard']);
+        this.dialogRef.close(); 
+
+      }
+    });
   }
 
   /**
