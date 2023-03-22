@@ -10,7 +10,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { Student } from '../../../models/Student';
-import { ServerApiATService } from 'src/app/services/server-api-at.service';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-form-signup',
@@ -25,7 +25,7 @@ export class FormSignupComponent {
    * @param dialogRef       dialog reference from the parent component
    */
   constructor(public dialogRef: MatDialogRef<FormSignupComponent>, 
-            private server_api_at: ServerApiATService,
+            private server_api_at: AuthService,
             private router: Router) {
     dialogRef.disableClose = true; // prevent closing when clicking outside the dialog
     this.errorMsg = "";

@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
-import { ServerApiATService } from 'src/app/services/server-api-at.service';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-form-login',
@@ -25,7 +25,7 @@ export class FormLoginComponent implements OnInit {
    * @param dialogRef       dialog reference from the parent component
    */
   constructor(public dialogRef: MatDialogRef<FormLoginComponent>, 
-            private server_api_at: ServerApiATService, 
+            private server_api_at: AuthService, 
             private router: Router) {
     dialogRef.disableClose = true; // prevent closing when clicking outside the dialog
     this.errorMsg = "";
