@@ -1,7 +1,10 @@
 # CMPT 372 - Group 17: Web IDE
 
 ## Link to Application
-url:
+url:http://372asn.wzy990888.net/#/
+url:http://372asn.wzy990888.net/#/dashboard
+
+
 
 
 
@@ -13,7 +16,8 @@ Login page for existing users
 <br>
 
 ### ```/signup```
-Sign up page for new users
+Sign up page for new users,
+We are currently moving from session-based authentication to token-based authentication, so some authentication features are temporarily disabled in this release.
 <br>
 <br>
 
