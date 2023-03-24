@@ -4,13 +4,25 @@ const asyncHandler = require("../middleware/async")
 const User = require("../models/User")
 
 exports.signUp = asyncHandler(async (req, res, next) => {
-    const { email, password } = req.body
+    const { email, password, confirmPassword } = req.body
 
     // Check for user
     const user = await User.findOne({ email })
 
     if (user) {
         return next(new ErrorResponse("Email already in use", 401))
+    }
+
+    if (!password || !confirmPassword) {
+        return next(
+            new ErrorResponse("Please enter a password and confirmPassword", 401)
+        )
+    }
+
+    if (password != confirmPassword) {
+        return next(
+            new ErrorResponse("Password and confirm password do not match", 401)
+        )
     }
 
     const newUser = await User.create({
@@ -56,7 +68,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 })
 
 exports.getLoggedInUser = asyncHandler(async (req, res, next) => {
-    const user = await User.find({ email: req.params.userEmail })
+    const user = await User.find({ userID: req.params.userID })
 
     res.status(200).json({
         success: true,
