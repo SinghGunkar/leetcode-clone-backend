@@ -40,6 +40,7 @@ exports.login = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse("Please provide an email and password", 400))
     }
 
+    // "+password" includes the password when querying database
     const user = await User.findOne({ email }).select("+password")
 
     if (!user) {
@@ -68,7 +69,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 })
 
 exports.getLoggedInUser = asyncHandler(async (req, res, next) => {
-    const user = await User.find({ userID: req.params.userID })
+    const user = await User.find({ _id: req.params.userID })
 
     res.status(200).json({
         success: true,
