@@ -14,6 +14,7 @@ connectToDatabase()
 const authRoutes = require("./routes/auth")
 const studentRoutes = require("./routes/student")
 const adminRoutes = require("./routes/admin")
+const questionRoutes = require("./routes/question")
 
 const app = express()
 
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/authentication", authRoutes)
 app.use("/student", studentRoutes)
 app.use("/admin", adminRoutes)
+app.use("/question", questionRoutes)
 
 app.use(errorHandler)
 
