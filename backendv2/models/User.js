@@ -26,9 +26,10 @@ const UserSchema = new mongoose.Schema({
         maxlength: [15, "Password must be less than 15 characters long"],
         select: false // don't return the password when querying database
     },
+    submissions: { type: [String] },
     role: {
         type: String,
-        enum: ["student"],
+        enum: ["student", "admin"],
         default: "student"
     },
     createdAt: {

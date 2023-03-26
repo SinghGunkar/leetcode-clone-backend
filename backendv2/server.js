@@ -12,6 +12,8 @@ dotenv.config({ path: "./config/config.env" })
 connectToDatabase()
 
 const authRoutes = require("./routes/auth")
+const studentRoutes = require("./routes/student")
+const adminRoutes = require("./routes/admin")
 
 const app = express()
 
@@ -26,6 +28,8 @@ if (process.env.NODE_ENV === "development") {
 
 // mount routers
 app.use("/authentication", authRoutes)
+app.use("/student", studentRoutes)
+app.use("/admin", adminRoutes)
 
 app.use(errorHandler)
 

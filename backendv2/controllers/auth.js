@@ -69,11 +69,10 @@ exports.logout = asyncHandler(async (req, res, next) => {
 })
 
 exports.getLoggedInUser = asyncHandler(async (req, res, next) => {
-    const user = await User.find({ _id: req.params.userID })
-
+    // userID is inside the Bearer token, req.user is set in the auth.js middleware
     res.status(200).json({
         success: true,
-        data: user
+        data: req.user
     })
 })
 
