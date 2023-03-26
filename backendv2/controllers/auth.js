@@ -6,7 +6,6 @@ const User = require("../models/User")
 exports.signUp = asyncHandler(async (req, res, next) => {
     const { email, password, confirmPassword } = req.body
 
-    // Check for user
     const user = await User.findOne({ email })
 
     if (user) {
@@ -69,7 +68,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 })
 
 exports.getLoggedInUser = asyncHandler(async (req, res, next) => {
-    // userID is inside the Bearer token, req.user is set in the auth.js middleware
+    // req.user is set in the middleware/auth.js protect function
     res.status(200).json({
         success: true,
         data: req.user
