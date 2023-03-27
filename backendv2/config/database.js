@@ -7,7 +7,7 @@ const connectDB = async () => {
 
     // For testing purposes
     const mongoConnectionStringTest =
-        "Replace me with your own connection string and change `mongoConnectionString` below to `mongoConnectionStringTest`"
+        "mongodb+srv://root:root@cluster0.ssjdrmy.mongodb.net/?retryWrites=true&w=majority"
 
     const connection = await mongoose.connect(mongoConnectionString, {
         useNewUrlParser: true,
