@@ -1,5 +1,5 @@
 const express = require("express")
-const { submitCode, getSubmissions, getOneSubmission, deleteSubmission } = require("../controllers/student")
+const { submitCode, getSubmissions, getOneSubmission, deleteOneSubmission } = require("../controllers/student")
 const { protect, authorize } = require("../middleware/auth")
 
 const router = express.Router()
@@ -29,7 +29,7 @@ router.delete(
     "/deleteOneSubmission/:userID/:questionNumber/:submissionID",
     protect,
     authorize("student", "admin"),
-    deleteSubmission
+    deleteOneSubmission
 )
 
 module.exports = router
