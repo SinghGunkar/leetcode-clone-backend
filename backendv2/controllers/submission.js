@@ -123,6 +123,20 @@ exports.getOneSubmission = asyncHandler(async (req, res, next) => {
 exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
     const { userID, questionID, submissionID } = req.params
 
+    const user = await User.findById(userID)
+
+    if (!user) {
+        return next(new ErrorResponse(`User with id: ${userID} does not exist`, 404))
+    }
+
+    const question = await Question.findById(questionID)
+
+    if (!question) {
+        return next(
+            new ErrorResponse(`Question with id: ${questionID} does not exist`, 404)
+        )
+    }
+
     const submission = await Submission.findOne({
         _id: new ObjectId(submissionID),
         userID: userID,
@@ -135,9 +149,17 @@ exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
 
     await submission.remove()
 
-    const update = { $pull: { submissions: submission._id.toString() } }
+    // remove foreign key(s) from user model
+    const update = {
+        $pull: { submissions: { submissionID: submissionID } }
+    }
 
     await User.findByIdAndUpdate(userID, update)
+
+    res.status(200).json({
+        success: true,
+        data: `deleted submission with id: ${submissionID} from user: ${userID}`
+    })
 
     res.status(200).json({ success: true })
 })

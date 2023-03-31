@@ -84,7 +84,7 @@ exports.deleteQuestion = asyncHandler(async (req, res, next) => {
         )
     }
 
-    // // delete the question
+    // delete the question
     await question.remove()
 
     // delete all submissions associated for that question
