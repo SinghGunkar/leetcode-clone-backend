@@ -98,6 +98,7 @@ exports.getSubmissions = asyncHandler(async (req, res, next) => {
     })
 })
 
+// double check if this works
 exports.getOneSubmission = asyncHandler(async (req, res, next) => {
     const { userID, questionID, submissionID } = req.params
 
@@ -117,6 +118,7 @@ exports.getOneSubmission = asyncHandler(async (req, res, next) => {
     })
 })
 
+// double check if this works
 exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
     const { userID, questionID, submissionID } = req.params
 
