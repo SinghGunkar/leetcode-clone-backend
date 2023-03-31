@@ -1,6 +1,8 @@
 const ErrorResponse = require("../utils/errorResponse")
 const asyncHandler = require("../middleware/async")
 const Question = require("../models/Question")
+const Submission = require("../models/Submission")
+const User = require("../models/User")
 
 exports.getAllQuestions = asyncHandler(async (req, res, next) => {
     const queryAll = {}
@@ -82,13 +84,20 @@ exports.deleteQuestion = asyncHandler(async (req, res, next) => {
         )
     }
 
+    // // delete the question
     await question.remove()
 
-    // TODO - delete all submissions associated with the question to be deleted
-    // const submissions = await Submission.find({ questionNumber })
-    // if (submissions) {
-    //     await Submission.deleteMany({ questionNumber })
-    // }
+    // delete all submissions associated for that question
+    const submissions = await Submission.find({ questionID })
+    if (submissions) {
+        await Submission.deleteMany({ questionID })
+    }
 
-    res.status(200).json({ success: true, data: question })
+    // remove foreign key(s) from user model
+    const update = {
+        $pull: { submissions: { questionID: questionID } }
+    }
+    await User.updateMany({}, update)
+
+    res.status(200).json({ success: true, data: "test" })
 })

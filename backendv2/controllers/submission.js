@@ -59,7 +59,8 @@ exports.submitCode = asyncHandler(async (req, res, next) => {
         codeResults: result
     })
 
-    const update = { $push: { submissions: submission._id.toString() } }
+    const submissionID = submission._id.toString()
+    const update = { $push: { submissions: { submissionID, questionID } } }
 
     await User.findByIdAndUpdate(userID, update)
 
