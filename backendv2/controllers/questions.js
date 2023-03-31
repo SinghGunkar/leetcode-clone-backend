@@ -99,5 +99,8 @@ exports.deleteQuestion = asyncHandler(async (req, res, next) => {
     }
     await User.updateMany({}, update)
 
-    res.status(200).json({ success: true, data: "test" })
+    res.status(200).json({
+        success: true,
+        data: `deleted question with id: ${questionID} and all of its relational data`
+    })
 })
