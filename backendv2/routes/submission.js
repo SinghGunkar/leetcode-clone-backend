@@ -1,5 +1,10 @@
 const express = require("express")
-const { submitCode, getSubmissions, getOneSubmission, deleteOneSubmission } = require("../controllers/student")
+const {
+    submitCode,
+    getSubmissions,
+    getOneSubmission,
+    deleteOneSubmission
+} = require("../controllers/submission")
 const { protect, authorize } = require("../middleware/auth")
 
 const router = express.Router()
