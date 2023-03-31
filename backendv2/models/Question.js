@@ -1,9 +1,9 @@
 const mongoose = require("mongoose")
 
 const QuestionSchema = new mongoose.Schema({
-    questionNumber: {
-        type: Number,
-        required: [true, "Please specify question number"]
+    questionTitle: {
+        type: String,
+        required: [true, "Please specify a question title"]
     },
     questionContent: {
         type: String,

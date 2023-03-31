@@ -13,13 +13,12 @@ exports.getAllQuestions = asyncHandler(async (req, res, next) => {
 })
 
 exports.getOneQuestion = asyncHandler(async (req, res, next) => {
-    const questionNumber = req.params.questionNumber
-    const queryOne = { questionNumber }
-    const question = await Question.find(queryOne)
+    const questionID = req.params.questionID
+    const question = await Question.findById(questionID)
 
     if (!question || question.length < 1) {
         return next(
-            new ErrorResponse(`Could not find question #${questionNumber}`, 401)
+            new ErrorResponse(`Could not find question with id: ${questionID}`, 401)
         )
     }
 
@@ -30,45 +29,52 @@ exports.getOneQuestion = asyncHandler(async (req, res, next) => {
 })
 
 exports.createQuestion = asyncHandler(async (req, res, next) => {
-    const { questionNumber, questionContent } = req.body
+    const { questionTitle, questionContent } = req.body
 
-    await Question.create({ questionNumber, questionContent })
+    const newQuestion = await Question.create({ questionTitle, questionContent })
 
     res.status(200).json({
         success: true,
-        message: `Successfully created question: ${questionNumber}: ${questionContent}`
+        data: newQuestion
     })
 })
 
 exports.updateQuestion = asyncHandler(async (req, res, next) => {
-    const { questionNumber } = req.params
+    const { questionID } = req.params
     const { questionContent } = req.body
 
-    const question = await Question.findOne({ questionNumber })
+    const question = await Question.findById(questionID)
 
     if (!question) {
-        return next(new ErrorResponse(`Question ${questionNumber} not found`, 404))
+        return next(
+            new ErrorResponse(`Question with id: ${questionNumber} not found`, 404)
+        )
     }
 
-    await Question.updateOne({ questionNumber }, { questionContent })
+    const updatedQuestion = await Question.findByIdAndUpdate(questionID, {
+        questionContent
+    })
 
     res.status(200).json({
         success: true,
-        message: `Successfully updated question: ${questionNumber}: ${questionContent}`
+        data: updatedQuestion
     })
 })
 
 exports.deleteQuestion = asyncHandler(async (req, res, next) => {
-    const { questionNumber } = req.params
+    const { questionID } = req.params
 
-    const question = await Question.findOne({ questionNumber })
+    const question = await Question.findById(questionID)
 
     if (!question) {
-        return next(new ErrorResponse(`Question ${questionNumber} not found`, 404))
+        return next(
+            new ErrorResponse(`Question with id: ${questionID} not found`, 404)
+        )
     }
 
     await question.remove()
 
+    // toDo
     const submissions = await Submission.find({ questionNumber })
     if (submissions) {
         await Submission.deleteMany({ questionNumber })

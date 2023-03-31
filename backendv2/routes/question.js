@@ -11,7 +11,7 @@ const { protect, authorize } = require("../middleware/auth")
 const router = express.Router()
 
 router.get(
-    "/getQuestion/:questionNumber",
+    "/getQuestion/:questionID",
     protect,
     authorize("student", "admin"),
     getOneQuestion
@@ -21,13 +21,13 @@ router.get("/allQuestions", protect, authorize("student", "admin"), getAllQuesti
 
 router.post("/createQuestion", protect, authorize("admin"), createQuestion)
 router.put(
-    "/updateQuestion/:questionNumber",
+    "/updateQuestion/:questionID",
     protect,
     authorize("admin"),
     updateQuestion
 )
 router.delete(
-    "/deleteQuestion/:questionNumber",
+    "/deleteQuestion/:questionID",
     protect,
     authorize("admin"),
     deleteQuestion
