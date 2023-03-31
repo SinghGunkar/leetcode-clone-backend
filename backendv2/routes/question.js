@@ -12,15 +12,25 @@ const router = express.Router()
 
 router.get(
     "/getQuestion/:questionNumber",
-    // protect,
-    // authorize("student", "admin"),
+    protect,
+    authorize("student", "admin"),
     getOneQuestion
 )
 
-router.get("/allQuestions", getAllQuestions)
+router.get("/allQuestions", protect, authorize("student", "admin"), getAllQuestions)
 
-router.post("/createQuestion", protect, createQuestion)
-router.put("/updateQuestion/:questionNumber", protect, updateQuestion)
-router.delete("/deleteQuestion/:questionNumber", protect, deleteQuestion)
+router.post("/createQuestion", protect, authorize("admin"), createQuestion)
+router.put(
+    "/updateQuestion/:questionNumber",
+    protect,
+    authorize("admin"),
+    updateQuestion
+)
+router.delete(
+    "/deleteQuestion/:questionNumber",
+    protect,
+    authorize("admin"),
+    deleteQuestion
+)
 
 module.exports = router
