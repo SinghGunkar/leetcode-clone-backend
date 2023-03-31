@@ -5,7 +5,7 @@ const SubmissionSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please specify a userID"]
     },
-    questionNumber: {
+    questionID: {
         type: String,
         required: [true, "Please specify question number"]
     },

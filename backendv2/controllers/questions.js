@@ -41,17 +41,27 @@ exports.createQuestion = asyncHandler(async (req, res, next) => {
 
 exports.updateQuestion = asyncHandler(async (req, res, next) => {
     const { questionID } = req.params
-    const { questionContent } = req.body
+    const { questionTitle, questionContent } = req.body
+
+    if (!questionTitle || !questionContent) {
+        return next(
+            new ErrorResponse(
+                `Please provide questionTitle and questionContent`,
+                404
+            )
+        )
+    }
 
     const question = await Question.findById(questionID)
 
     if (!question) {
         return next(
-            new ErrorResponse(`Question with id: ${questionNumber} not found`, 404)
+            new ErrorResponse(`Question with id: ${questionID} not found`, 404)
         )
     }
 
     const updatedQuestion = await Question.findByIdAndUpdate(questionID, {
+        questionTitle,
         questionContent
     })
 
@@ -74,11 +84,11 @@ exports.deleteQuestion = asyncHandler(async (req, res, next) => {
 
     await question.remove()
 
-    // toDo
-    const submissions = await Submission.find({ questionNumber })
-    if (submissions) {
-        await Submission.deleteMany({ questionNumber })
-    }
+    // TODO - delete all submissions associated with the question to be deleted
+    // const submissions = await Submission.find({ questionNumber })
+    // if (submissions) {
+    //     await Submission.deleteMany({ questionNumber })
+    // }
 
-    res.status(200).json({ success: true })
+    res.status(200).json({ success: true, data: question })
 })

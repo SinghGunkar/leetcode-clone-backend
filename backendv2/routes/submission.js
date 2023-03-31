@@ -10,28 +10,28 @@ const { protect, authorize } = require("../middleware/auth")
 const router = express.Router()
 
 router.post(
-    "/submitCode/:userID/:questionNumber",
+    "/submitCode/:userID/:questionID",
     protect,
     authorize("student", "admin"),
     submitCode
 )
 
 router.get(
-    "/getSubmissions/:userID/:questionNumber",
+    "/getSubmissions/:userID/:questionID",
     protect,
     authorize("student", "admin"),
     getSubmissions
 )
 
 router.get(
-    "/getOneSubmission/:userID/:questionNumber/:submissionID",
+    "/getOneSubmission/:userID/:questionID/:submissionID",
     protect,
     authorize("student", "admin"),
     getOneSubmission
 )
 
 router.delete(
-    "/deleteOneSubmission/:userID/:questionNumber/:submissionID",
+    "/deleteOneSubmission/:userID/:questionID/:submissionID",
     protect,
     authorize("student", "admin"),
     deleteOneSubmission

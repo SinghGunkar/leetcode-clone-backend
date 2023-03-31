@@ -36,6 +36,15 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
         req.user = await User.findById(userId)
 
+        if (!req.user) {
+            return next(
+                new ErrorResponse(
+                    `Bearer token contains userId: ${userId}, but a user with that id does not exist`,
+                    401
+                )
+            )
+        }
+
         next()
     } catch (err) {
         return next(
