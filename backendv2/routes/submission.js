@@ -1,5 +1,6 @@
 const express = require("express")
 const {
+    runCode,
     submitCode,
     getSubmissions,
     getOneSubmission,
@@ -10,6 +11,13 @@ const { protect, authorize } = require("../middleware/auth")
 const router = express.Router()
 
 router.post(
+    "/runCode",
+    protect,
+    authorize("student", "admin"),
+    runCode
+)
+
+router.post(
     "/submitCode/:userID/:questionID",
     protect,
     authorize("student", "admin"),
@@ -17,9 +25,9 @@ router.post(
 )
 
 router.get(
-    "/getSubmissions/:userID/:questionID",
+    "/getSubmissions/:questionID",
     protect,
-    authorize("student", "admin"),
+    authorize("admin"),
     getSubmissions
 )
 

@@ -9,7 +9,7 @@ const connectDB = async () => {
     const mongoConnectionStringTest =
         "mongodb+srv://root:root@cluster0.ssjdrmy.mongodb.net/?retryWrites=true&w=majority"
 
-    const connection = await mongoose.connect(mongoConnectionString, {
+    const connection = await mongoose.connect(mongoConnectionStringTest, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,

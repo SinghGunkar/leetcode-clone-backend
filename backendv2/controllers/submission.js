@@ -32,6 +32,12 @@ const runCode = code => {
     })
 }
 
+exports.runCode = asyncHandler(async (req, res, next) => {
+    const { code } = req.body
+    const result = await runCode(code)
+    res.status(200).json({ result: result })
+})
+
 exports.submitCode = asyncHandler(async (req, res, next) => {
     const { userID, questionID } = req.params
     const { code } = req.body
@@ -52,29 +58,34 @@ exports.submitCode = asyncHandler(async (req, res, next) => {
 
     const result = await runCode(code)
 
-    const submission = await Submission.create({
+    const submission = await Submission.findOne({
         userID,
-        questionID,
-        userSubmittedCode: code,
-        codeResults: result
+        questionID
     })
 
-    const submissionID = submission._id.toString()
-    const update = { $push: { submissions: { submissionID, questionID } } }
+    if (!submission) {
+        const newSubmission = await Submission.create({
+            userID,
+            questionID,
+            userSubmittedCode: code,
+            codeResults: result
+        })
+        const submissionID = newSubmission._id.toString()
+        const update = { $push: { submissions: { submissionID, questionID } } }
 
-    await User.findByIdAndUpdate(userID, update)
+        await User.findByIdAndUpdate(userID, update)
+    }
+    else {
+        submission.userSubmittedCode = code
+        submission.codeResults = result
+        await submission.save()
+    }
 
     res.status(200).json({ result: result })
 })
 
 exports.getSubmissions = asyncHandler(async (req, res, next) => {
-    const { userID, questionID } = req.params
-
-    const user = await User.findById(userID)
-
-    if (!user) {
-        return next(new ErrorResponse(`User with id: ${userID} does not exist`, 404))
-    }
+    const { questionID } = req.params
 
     const question = await Question.findById(questionID)
 
@@ -84,10 +95,7 @@ exports.getSubmissions = asyncHandler(async (req, res, next) => {
         )
     }
 
-    const submissions = await Submission.find({
-        userID,
-        questionID
-    })
+    const submissions = await Submission.find({ questionID }, "codeResults").populate("questionID userID", "questionTitle questionContent name email")
 
     if (!submissions) {
         return next(new ErrorResponse(`Submissions not found`, 404))
@@ -99,15 +107,14 @@ exports.getSubmissions = asyncHandler(async (req, res, next) => {
     })
 })
 
-// double check if this works
 exports.getOneSubmission = asyncHandler(async (req, res, next) => {
     const { userID, questionID, submissionID } = req.params
 
     const submission = await Submission.findOne({
         _id: new ObjectId(submissionID),
-        userID: userID,
-        questionID
-    })
+        userID: new ObjectId(userID),
+        questionID: new ObjectId(questionID)
+    }).populate("questionID userID", "questionTitle questionContent name email")
 
     if (!submission) {
         return next(new ErrorResponse(`Submission ${submissionID} not found`, 404))
@@ -119,7 +126,6 @@ exports.getOneSubmission = asyncHandler(async (req, res, next) => {
     })
 })
 
-// double check if this works
 exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
     const { userID, questionID, submissionID } = req.params
 
@@ -137,11 +143,7 @@ exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
         )
     }
 
-    const submission = await Submission.findOne({
-        _id: new ObjectId(submissionID),
-        userID: userID,
-        questionID
-    })
+    const submission = await Submission.findById(submissionID)
 
     if (!submission) {
         return next(new ErrorResponse(`Submission ${submissionID} not found`, 404))
@@ -160,6 +162,4 @@ exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
         success: true,
         data: `deleted submission with id: ${submissionID} from user: ${userID}`
     })
-
-    res.status(200).json({ success: true })
 })
