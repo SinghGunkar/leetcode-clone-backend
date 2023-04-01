@@ -108,26 +108,7 @@ exports.getSubmissions = asyncHandler(async (req, res, next) => {
 })
 
 exports.getOneSubmission = asyncHandler(async (req, res, next) => {
-    const { userID, questionID, submissionID } = req.params
-
-    const submission = await Submission.findOne({
-        _id: new ObjectId(submissionID),
-        userID: new ObjectId(userID),
-        questionID: new ObjectId(questionID)
-    }).populate("questionID userID", "questionTitle questionContent name email")
-
-    if (!submission) {
-        return next(new ErrorResponse(`Submission ${submissionID} not found`, 404))
-    }
-
-    res.status(200).json({
-        success: true,
-        result: submission
-    })
-})
-
-exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
-    const { userID, questionID, submissionID } = req.params
+    const { userID, questionID } = req.params
 
     const user = await User.findById(userID)
 
@@ -143,23 +124,58 @@ exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
         )
     }
 
-    const submission = await Submission.findById(submissionID)
+    const submission = await Submission.findOne({
+        userID: new ObjectId(userID),
+        questionID: new ObjectId(questionID)
+    }).populate("questionID userID", "questionTitle questionContent name email")
 
     if (!submission) {
-        return next(new ErrorResponse(`Submission ${submissionID} not found`, 404))
+        return next(new ErrorResponse(`Submission for question ${questionID} not found`, 404))
+    }
+
+    res.status(200).json({
+        success: true,
+        result: submission
+    })
+})
+
+exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
+    const { userID, questionID } = req.params
+
+    const user = await User.findById(userID)
+
+    if (!user) {
+        return next(new ErrorResponse(`User with id: ${userID} does not exist`, 404))
+    }
+
+    const question = await Question.findById(questionID)
+
+    if (!question) {
+        return next(
+            new ErrorResponse(`Question with id: ${questionID} does not exist`, 404)
+        )
+    }
+
+    const submission = await Submission.findOne({
+        userID: new ObjectId(userID),
+        questionID: new ObjectId(questionID)
+    }).populate("questionID userID", "questionTitle questionContent name email")
+
+    if (!submission) {
+        return next(new ErrorResponse(`Submission for question ${questionID} not found`, 404))
     }
 
     await submission.remove()
 
     // remove foreign key(s) from user model
     const update = {
-        $pull: { submissions: { submissionID: submissionID } }
+        $pull: { submissions: { submissionID: submission._id } }
     }
 
     await User.findByIdAndUpdate(userID, update)
 
     res.status(200).json({
         success: true,
-        data: `deleted submission with id: ${submissionID} from user: ${userID}`
+        data: `deleted submission for question ${questionID} from user: ${userID}`
     })
 })

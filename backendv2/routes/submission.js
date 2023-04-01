@@ -32,14 +32,14 @@ router.get(
 )
 
 router.get(
-    "/getOneSubmission/:userID/:questionID/:submissionID",
+    "/getOneSubmission/:userID/:questionID",
     protect,
     authorize("student", "admin"),
     getOneSubmission
 )
 
 router.delete(
-    "/deleteOneSubmission/:userID/:questionID/:submissionID",
+    "/deleteOneSubmission/:userID/:questionID",
     protect,
     authorize("student", "admin"),
     deleteOneSubmission
