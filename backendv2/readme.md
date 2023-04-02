@@ -1,3 +1,7 @@
+### Database design
+
+![](misc/db_relationships.png)
+
 ### User endpoints
 
 ---
