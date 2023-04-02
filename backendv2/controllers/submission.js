@@ -73,7 +73,12 @@ exports.submitCode = asyncHandler(async (req, res, next) => {
     const { userID, questionID } = req.params
     const { code, input } = req.body
 
-    console.log(code)
+    if (!userID || !questionID) {
+        return next(
+            new ErrorResponse(`Please enter both userID and questionID`, 404)
+        )
+    }
+
     const user = await User.findById(userID)
 
     if (!user) {
