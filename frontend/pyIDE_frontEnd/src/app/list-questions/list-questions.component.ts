@@ -46,15 +46,17 @@ export class ListQuestionsComponent {
   }
 
   deleteQuestion(QID:string){
-    this.questionService.deleteQuestion(QID,(response)=>{
+    if (window.confirm("Are you sure you want to delete this question?")) {
+      this.questionService.deleteQuestion(QID,(response)=>{
       if(response[0] == true){
         window.location.reload();
         this.router.navigate(['/dashboard']);
       }else{
         alert(response[1])
       }
-
     });
+    }
+
   }
 
   displayedColumns: string[] = [ 'title', 'id'];

@@ -94,7 +94,13 @@ export class QuestionEditorComponent {
   }
 
   cancel(){
-    this.router.navigate(['/dashboard']);
+    if (!this.newQuestionForm.valid) {
+      this.router.navigate(['/dashboard']);
+    } else if (this.newQuestionForm.valid) {
+      if (window.confirm("This question will not be saved! Are you sure you want to leave this page?")) {
+        this.router.navigate(['/dashboard']);
+      } 
+    }
   }
 
 }
