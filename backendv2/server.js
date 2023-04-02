@@ -13,6 +13,7 @@ const rateLimit = require("express-rate-limit")
 const hpp = require("hpp")
 const { send } = require("process")
 const e = require("express")
+const routeNotFound = require("./middleware/routeNotFound")
 
 dotenv.config({ path: "./config/config.env" })
 
@@ -57,6 +58,7 @@ app.use("/submission", submissionRoutes)
 app.use("/question", questionRoutes)
 
 app.use(errorHandler)
+app.use(routeNotFound)
 
 const PORT = process.env.PORT || 5000
 
