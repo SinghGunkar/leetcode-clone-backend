@@ -1,5 +1,5 @@
 const express = require("express")
-const { signUp, login, logout, getLoggedInUser } = require("../controllers/auth")
+const { signUp, login, logout, deleteUser, getLoggedInUser, getAllUsers } = require("../controllers/user")
 const { protect, authorize } = require("../middleware/auth")
 
 const router = express.Router()
@@ -12,6 +12,18 @@ router.get(
     protect,
     authorize("student", "admin"),
     getLoggedInUser
+)
+router.delete(
+    "/deleteUser/:userID",
+    protect,
+    authorize("admin"),
+    deleteUser)
+
+router.get(
+    "/getAllUsers",
+    protect,
+    authorize("admin"),
+    getAllUsers
 )
 
 module.exports = router

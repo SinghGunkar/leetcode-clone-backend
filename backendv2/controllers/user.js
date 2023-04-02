@@ -2,9 +2,10 @@ const crypto = require("crypto")
 const ErrorResponse = require("../utils/errorResponse")
 const asyncHandler = require("../middleware/async")
 const User = require("../models/User")
+const Submission = require("../models/Submission")
 
 exports.signUp = asyncHandler(async (req, res, next) => {
-    const { email, password, confirmPassword } = req.body
+    const { name, email, password, confirmPassword } = req.body
 
     const user = await User.findOne({ email })
 
@@ -25,6 +26,7 @@ exports.signUp = asyncHandler(async (req, res, next) => {
     }
 
     const newUser = await User.create({
+        name,
         email,
         password
     })
@@ -95,3 +97,28 @@ const sendTokenResponse = (user, statusCode, res) => {
         token
     })
 }
+
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+    const { userID } = req.params
+    const user = await User.findById(userID)
+
+    if (!user) {
+        return next(
+            new ErrorResponse(`Question with id: ${userID} not found`, 404)
+        )
+    }
+
+    await user.remove()
+
+    const submissions = await Submission.find({ userID })
+    if (submissions) {
+        await Submission.deleteMany({ userID })
+    }
+
+    res.status(200).json({ success: true })
+})
+
+exports.getAllUsers = asyncHandler(async (req, res, next) => {
+    const users = await User.find({ role: "student" }, "name email")
+    res.status(200).json({ users: users })
+})

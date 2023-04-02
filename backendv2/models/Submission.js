@@ -2,11 +2,13 @@ const mongoose = require("mongoose")
 
 const SubmissionSchema = new mongoose.Schema({
     userID: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: [true, "Please specify a userID"]
     },
-    questionNumber: {
-        type: String,
+    questionID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Question',
         required: [true, "Please specify question number"]
     },
     userSubmittedCode: {

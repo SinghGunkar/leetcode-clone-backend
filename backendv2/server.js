@@ -1,19 +1,23 @@
 const express = require("express")
 const dotenv = require("dotenv")
 const morgan = require("morgan")
-var colors = require("colors")
+const colors = require("colors")
 const connectToDatabase = require("./config/database")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const errorHandler = require("./middleware/error")
+const mongoSanitize = require("express-mongo-sanitize")
+const helmet = require("helmet")
+const xss = require("xss-clean")
+const rateLimit = require("express-rate-limit")
+const hpp = require("hpp")
 
 dotenv.config({ path: "./config/config.env" })
 
 connectToDatabase()
 
-const authRoutes = require("./routes/auth")
-const studentRoutes = require("./routes/student")
-const adminRoutes = require("./routes/admin")
+const userRoutes = require("./routes/user")
+const submissionRoutes = require("./routes/submission")
 const questionRoutes = require("./routes/question")
 
 const app = express()
@@ -27,10 +31,23 @@ if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"))
 }
 
+app.use(mongoSanitize()) // sanitize data
+app.use(helmet()) // set security headers
+app.use(xss()) // prevent xss attacks
+app.use(hpp()) // prevent hpp param polution
+
+// rate limiting
+const tenMinutes = 10 * 60 * 1000
+const maxRequests = 2500
+const limiter = rateLimit({
+    windowMs: tenMinutes,
+    max: maxRequests
+})
+app.use(limiter)
+
 // mount routers
-app.use("/authentication", authRoutes)
-app.use("/student", studentRoutes)
-app.use("/admin", adminRoutes)
+app.use("/user", userRoutes)
+app.use("/submission", submissionRoutes)
 app.use("/question", questionRoutes)
 
 app.use(errorHandler)

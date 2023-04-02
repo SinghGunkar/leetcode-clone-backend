@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "NODE_ENV=production node server",
-        "dev": "nodemon server"
+        "dev": "nodemon --watch src server.js"
     },
     "keywords": [],
     "author": "",

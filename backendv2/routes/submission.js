@@ -1,32 +1,45 @@
 const express = require("express")
-const { submitCode, getSubmissions, getOneSubmission, deleteOneSubmission } = require("../controllers/student")
+const {
+    runCode,
+    submitCode,
+    getSubmissions,
+    getOneSubmission,
+    deleteOneSubmission
+} = require("../controllers/submission")
 const { protect, authorize } = require("../middleware/auth")
 
 const router = express.Router()
 
 router.post(
-    "/submitCode/:userID/:questionNumber",
+    "/runCode",
+    protect,
+    authorize("student", "admin"),
+    runCode
+)
+
+router.post(
+    "/submitCode/:userID/:questionID",
     protect,
     authorize("student", "admin"),
     submitCode
 )
 
 router.get(
-    "/getSubmissions/:userID/:questionNumber",
+    "/getSubmissions/:questionID",
     protect,
-    authorize("student", "admin"),
+    authorize("admin"),
     getSubmissions
 )
 
 router.get(
-    "/getOneSubmission/:userID/:questionNumber/:submissionID",
+    "/getOneSubmission/:userID/:questionID",
     protect,
     authorize("student", "admin"),
     getOneSubmission
 )
 
 router.delete(
-    "/deleteOneSubmission/:userID/:questionNumber/:submissionID",
+    "/deleteOneSubmission/:userID/:questionID",
     protect,
     authorize("student", "admin"),
     deleteOneSubmission
