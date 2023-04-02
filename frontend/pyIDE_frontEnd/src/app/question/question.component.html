@@ -1,4 +1,4 @@
-<app-toolbar></app-toolbar>
+<app-toolbar *ngIf="!isAdmin"></app-toolbar>
 
 <app-question-editor *ngIf="isAdmin"></app-question-editor>
 
