@@ -1,6 +1,8 @@
 <app-toolbar></app-toolbar>
 
-<mat-card>
+<app-question-editor *ngIf="isAdmin"></app-question-editor>
+
+<mat-card *ngIf="!isAdmin">
     <mat-card-header>
       <mat-card-title>{{questionTitle}}</mat-card-title>
       <!-- this is for future function that allow to display the question create time -->
