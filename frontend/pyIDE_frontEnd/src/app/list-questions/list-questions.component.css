@@ -2,4 +2,11 @@
     flex: 1 1 auto;
   }
 
-  
+.table-button button{
+  width: 100px;
+}
+
+.button-box{
+  margin-top: 15px;
+  margin-bottom: 15px;;
+}

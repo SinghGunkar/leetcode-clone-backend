@@ -8,19 +8,21 @@
         </div>
     </mat-card-content>
 
-    <!-- <mat-card-content class="card-container">
+    <mat-card-content class="card-container">
+        <form class="" [formGroup]="stdInputForm">
         <mat-form-field class="example-full-width" style="width:100%">
             <mat-label>Stranded Input</mat-label>
-            <textarea matInput placeholder="Put your input value here before click run."></textarea>
+            <textarea matInput formControlName="stdInput" placeholder="Put your input value here before click run."></textarea>
         </mat-form-field>
-    </mat-card-content> -->
+        </form>
+    </mat-card-content>
     <mat-card-content class="button-row card-container">
         <button mat-raised-button color="primary" (click)="onSubmit()">
             <mat-icon>play_arrow</mat-icon> RUN
         </button>
 
-        <button mat-raised-button color="warn">
-            <mat-icon>stop</mat-icon> STOP
+        <button mat-raised-button color="warn" (click)="refresh()">
+            <mat-icon>repeat</mat-icon> Refresh
         </button>
 
         <button mat-raised-button color="accent" (click)="clearXtermAndBuffer()">
@@ -35,8 +37,8 @@
 
 
         <label for="uploader" class="drop-container">
-            <span class="drop-title">Drop files here</span>
-            or
+            <span class="drop-title">Select files here</span>
+            <!-- or -->
             <input type="file" id="uploader" accept=".py" (change)="onChange($event)" class="upload-input" >
             <button (click)="onUpload()" mat-raised-button color="primary">Submit</button>
           </label>

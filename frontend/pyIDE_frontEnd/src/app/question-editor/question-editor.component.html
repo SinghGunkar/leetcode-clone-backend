@@ -14,8 +14,6 @@
 
             <mat-card-subtitle>Question Title</mat-card-subtitle>
 
-
-
             <mat-form-field class="card-content">
                 <mat-label>Question Title</mat-label>
                 <input class="card-content " type="text" matInput formControlName="course_name">
@@ -32,7 +30,7 @@
             </div>
         </mat-card-content>
 
-        <mat-card-content>
+        <mat-card-content style="display: none;">
             <mat-card-subtitle>Question Code</mat-card-subtitle>
 
             <div class="code-card-box">
@@ -48,7 +46,7 @@
 
         <mat-card-actions class="button-row">
             <button mat-raised-button color="primary" [disabled]="!newQuestionForm.valid" (click)="submitQuestion()">Save</button>
-            <button mat-raised-button color="warn">Cancel</button>
+            <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
         </mat-card-actions>
     </form>
 </mat-card>

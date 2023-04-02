@@ -6,11 +6,26 @@ const Submission = require("../models/Submission")
 const { spawn } = require("child_process")
 const { ObjectId } = require("mongoose").Types
 
-const runCode = code => {
+const runCode = (code,input) => {
     return new Promise((resolve, reject) => {
         const python = spawn("python", ["-c", code])
 
+        let securityResult = codeSecurityCheck(code);
+        if (!securityResult[0]){
+            reject(
+                new ErrorResponse(securityResult[1].toString(), 500)
+            )
+            return
+        }
+        
         let output = ""
+
+        // python.stdin.write('username' + "\n"+'usernamee' + "\n")
+
+        if(input){
+            python.stdin.write(input.toString() + "\n")
+        }
+        
 
         python.stdout.on("data", data => {
             output += data.toString()
@@ -25,23 +40,44 @@ const runCode = code => {
                 resolve(output)
             } else {
                 reject(
-                    new ErrorResponse(`Child process exited with code ${code}`, 500)
+                    new ErrorResponse(`Child process exited with code ${code}\n` + `${output}`, 500)
                 )
             }
         })
     })
 }
 
+function codeSecurityCheck(code){
+
+        let temp_code = code.trim();
+
+        temp_code = temp_code.replace(/ /g,"");
+
+        temp_code = temp_code.toLowerCase();
+
+        console.log('tpe:',temp_code)
+
+        if (temp_code.includes("importos")){
+            return [false, "Not Allow To Use OS Module"]
+        } 
+        else if (temp_code.includes("importplatform")){
+            return [false, "Not Allow To Use platform Module"]
+        }
+
+    return [true, null];
+}
+
 exports.runCode = asyncHandler(async (req, res, next) => {
-    const { code } = req.body
-    const result = await runCode(code)
+    const { code, input } = req.body
+    const result = await runCode(code, input)
     res.status(200).json({ result: result })
 })
 
 exports.submitCode = asyncHandler(async (req, res, next) => {
     const { userID, questionID } = req.params
-    const { code } = req.body
+    const { code, input } = req.body
 
+    console.log(code)
     const user = await User.findById(userID)
 
     if (!user) {
@@ -56,7 +92,7 @@ exports.submitCode = asyncHandler(async (req, res, next) => {
         )
     }
 
-    const result = await runCode(code)
+    const result = await runCode(code, input)
 
     const submission = await Submission.findOne({
         userID,

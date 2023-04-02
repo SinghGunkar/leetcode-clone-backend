@@ -7,10 +7,13 @@
       <!-- <mat-card-subtitle>{{questionTime}}</mat-card-subtitle> -->
     </mat-card-header>
     <mat-card-content>
-        {{questionContent}}
+        <!-- {{questionContent}} -->
+        <div class="ql-container ql-snow" style="border-width: 0;">
+        <div class="ql-editor"  [innerHTML]="questionContent">hi</div>
+        </div>
     </mat-card-content>
 
   </mat-card>
   <br>
 
-<app-code-panel></app-code-panel>
+<app-code-panel [questionID]="id"></app-code-panel>

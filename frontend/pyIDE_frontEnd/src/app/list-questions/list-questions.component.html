@@ -5,7 +5,7 @@
 
     </mat-card-header>
     <mat-card-content>
-        <table mat-table  [dataSource]="questionList">
+        <table mat-table  [dataSource]="questionList" class="question-table">
             <!-- <table mat-table [dataSource]="notesData" > -->
 
             <!--- Note that these columns can be defined in any order.
@@ -29,8 +29,10 @@
               <th mat-header-cell *matHeaderCellDef> Action </th>
               <td mat-cell *matCellDef="let element" style="width: 15%;">
                  <!-- {{element.id}} -->
+                 <div class="button-row button-list table-button button-box">
                 <button mat-raised-button color="primary" routerLink='/question/{{element.QuestionId}}'>View</button>
-
+                <button *ngIf="isAdmin" mat-raised-button color="warn" (click)="deleteQuestion(element.QuestionId)">Delete</button>
+              </div>
                 <!-- routerLink='/detail/{{element.reportID}} -->
                 
             </td>

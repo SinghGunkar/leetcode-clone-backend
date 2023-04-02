@@ -4,6 +4,9 @@ import { CallbackOneParam } from "./../interfaces";
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../environment';
 import { AbstractControl, FormControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AuthService } from '../auth.service';
+import { QuestionServiceService } from './../question-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-question-editor',
@@ -30,7 +33,8 @@ export class QuestionEditorComponent {
   questionText = '';
   questionCode = '';
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  constructor(private http: HttpClient, private fb: FormBuilder, private auth:AuthService, private questionService: QuestionServiceService,private router: Router) {
+    this.auth.adminOnly();
     this.newQuestionForm = this.fb.group({
       course_name: new FormControl('', [Validators.required]),
     })
@@ -55,8 +59,9 @@ export class QuestionEditorComponent {
       ['bold', 'italic', 'underline'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }],
       [{ 'indent': '-1' }, { 'indent': '+1' }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      ['image', 'code-block']
+      // [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      // ['image'],
+      ['code-block']
     ],
   };
 
@@ -74,7 +79,22 @@ export class QuestionEditorComponent {
     console.log(this.questionText)
     console.log(this.aceEditor.getSession().getValue())
 
+    let title = this.newQuestionForm.value.course_name
+    let description = this.questionText;
+    let code = this.aceEditor.getSession().getValue();
 
+    this.questionService.submitNewQuestion({"code": code, "description": description, "title": title },(response)=>{
+      console.log(response)
+      this.router.navigate(['/dashboard']);
+    })
+
+    
+
+
+  }
+
+  cancel(){
+    this.router.navigate(['/dashboard']);
   }
 
 }

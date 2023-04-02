@@ -53,17 +53,33 @@ export class FormLoginComponent implements OnInit {
 
     
     // login is valid, check the database
-    this.server_api_at.login(email, password).subscribe(data => {
-      // invalid login
-      if (!data.isLogin) {
-        this.errorMsg = data.message;
-      } else {  // login success, redirect to dashboard
-        console.log("Redirect to dashboard")
+    this.server_api_at.login(email, password,(response)=>{
+      //login success, redirect to dashboard
+      if (response == true){  
+      console.log("Redirect to dashboard")
         this.router.navigate(['/dashboard']);
-        this.dialogRef.close(); 
+        this.dialogRef.close();
+      }else{
+        this.errorMsg = "login unsuccess, check your email and password.";
+      } 
 
-      }
-    });
+
+
+    })
+ 
+
+    // this.server_api_at.login(email, password).subscribe(data => {
+    //   // invalid login
+
+    //   if (!data.success) {
+    //     this.errorMsg = data.message;
+    //   } else {  // login success, redirect to dashboard
+    //     console.log("Redirect to dashboard")
+    //     this.router.navigate(['/dashboard']);
+    //     this.dialogRef.close(); 
+
+    //   }
+    // });
   }
 
   /**

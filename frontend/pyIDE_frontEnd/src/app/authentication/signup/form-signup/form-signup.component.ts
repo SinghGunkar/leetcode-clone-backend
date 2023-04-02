@@ -35,14 +35,15 @@ export class FormSignupComponent {
 
   /**
    * Perform data validation and submit. If all inputs are valid, redirect to the dashboard
+   * @param username     existing student's user name
    * @param email     existing student's email
    * @param password  existing student's password 
    * @returns n/a     redirect the user to the login in page if successful, display
    *                  an error message otherwise
    */
-  public signup(email: string, password: string, confirmPassword: string): void {
+  public signup(username: string, email: string, password: string, confirmPassword: string): void {
     // input fields can not be empty
-    if (email.length === 0 || password.length === 0 || confirmPassword.length === 0) {
+    if (username.length === 0 || email.length === 0 || password.length === 0 || confirmPassword.length === 0) {
       this.errorMsg = "Invalid email or password"; 
       return;     
     }
@@ -60,18 +61,22 @@ export class FormSignupComponent {
     }
 
     // login is valid
-    this.server_api_at.signup(email, password).subscribe(data => {
+    this.server_api_at.signup(username, email, password).subscribe(data => {
       // email already exists
-      if (data.localeCompare("Email Address is Already Registered") === 0) {
-        this.errorMsg = "Email Address is Already Registered!";
-        return;
-      }
+      // if (data.localeCompare("Email already in use") === 0) {
+      //   this.errorMsg = "Email Address is Already Registered!";
+      //   return;
+      // }
       // creating a new account
-      if (data.localeCompare("Registration Successful") === 0) {
+      // if (data.localeCompare("Registration Successful") === 0) {
         console.log("Redirecting to login...");
         this.router.navigate(['']);
         this.dialogRef.close();
-      }
+      // }
+    },error =>{
+      // catch error from backend and put in this.errorMsg
+      // alert(error.error.error)
+      this.errorMsg = error.error.error;
     })
   }
 

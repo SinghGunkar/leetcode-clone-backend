@@ -13,23 +13,31 @@ exports.signUp = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse("Email already in use", 401))
     }
 
-    if (!password || !confirmPassword) {
+    // if (!password || !confirmPassword) {
+    //     return next(
+    //         new ErrorResponse("Please enter a password and confirmPassword", 401)
+    //     )
+    // }
+
+    if (!password) {
         return next(
-            new ErrorResponse("Please enter a password and confirmPassword", 401)
+            new ErrorResponse("Please enter a password", 401)
         )
     }
 
-    if (password != confirmPassword) {
-        return next(
-            new ErrorResponse("Password and confirm password do not match", 401)
-        )
-    }
+    // if (password != confirmPassword) {
+    //     return next(
+    //         new ErrorResponse("Password and confirm password do not match", 401)
+    //     )
+    // }
 
     const newUser = await User.create({
         name,
         email,
         password
     })
+
+
 
     sendTokenResponse(newUser, 200, res)
 })

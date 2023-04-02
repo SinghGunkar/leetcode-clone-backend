@@ -24,7 +24,15 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
+// app.use(cors())
+//CORS setting
+
+const { send } = require("process");
+const e = require("express");
+
+app.use(cors({
+    origin: '*'
+}));
 
 // development logging middleware
 if (process.env.NODE_ENV === "development") {
