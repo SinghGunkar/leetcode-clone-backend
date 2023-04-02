@@ -6,26 +6,39 @@ const Submission = require("../models/Submission")
 const { spawn } = require("child_process")
 const { ObjectId } = require("mongoose").Types
 
-const runCode = (code,input) => {
+const codeSecurityCheck = code => {
+    let temp_code = code.trim()
+
+    temp_code = temp_code.replace(/ /g, "")
+
+    temp_code = temp_code.toLowerCase()
+
+    console.log("tpe:", temp_code)
+
+    if (temp_code.includes("importos")) {
+        return [false, "Not Allow To Use OS Module"]
+    } else if (temp_code.includes("importplatform")) {
+        return [false, "Not Allow To Use platform Module"]
+    }
+
+    return [true, null]
+}
+
+const runCode = (code, input) => {
     return new Promise((resolve, reject) => {
         const python = spawn("python", ["-c", code])
 
-        let securityResult = codeSecurityCheck(code);
-        if (!securityResult[0]){
-            reject(
-                new ErrorResponse(securityResult[1].toString(), 500)
-            )
+        let securityResult = codeSecurityCheck(code)
+        if (!securityResult[0]) {
+            reject(new ErrorResponse(securityResult[1].toString(), 500))
             return
         }
-        
+
         let output = ""
 
-        // python.stdin.write('username' + "\n"+'usernamee' + "\n")
-
-        if(input){
+        if (input) {
             python.stdin.write(input.toString() + "\n")
         }
-        
 
         python.stdout.on("data", data => {
             output += data.toString()
@@ -40,31 +53,14 @@ const runCode = (code,input) => {
                 resolve(output)
             } else {
                 reject(
-                    new ErrorResponse(`Child process exited with code ${code}\n` + `${output}`, 500)
+                    new ErrorResponse(
+                        `Child process exited with code ${code}\n` + `${output}`,
+                        500
+                    )
                 )
             }
         })
     })
-}
-
-function codeSecurityCheck(code){
-
-        let temp_code = code.trim();
-
-        temp_code = temp_code.replace(/ /g,"");
-
-        temp_code = temp_code.toLowerCase();
-
-        console.log('tpe:',temp_code)
-
-        if (temp_code.includes("importos")){
-            return [false, "Not Allow To Use OS Module"]
-        } 
-        else if (temp_code.includes("importplatform")){
-            return [false, "Not Allow To Use platform Module"]
-        }
-
-    return [true, null];
 }
 
 exports.runCode = asyncHandler(async (req, res, next) => {
@@ -110,8 +106,7 @@ exports.submitCode = asyncHandler(async (req, res, next) => {
         const update = { $push: { submissions: { submissionID, questionID } } }
 
         await User.findByIdAndUpdate(userID, update)
-    }
-    else {
+    } else {
         submission.userSubmittedCode = code
         submission.codeResults = result
         await submission.save()
@@ -131,7 +126,10 @@ exports.getSubmissions = asyncHandler(async (req, res, next) => {
         )
     }
 
-    const submissions = await Submission.find({ questionID }, "codeResults").populate("questionID userID", "questionTitle questionContent name email")
+    const submissions = await Submission.find(
+        { questionID },
+        "codeResults"
+    ).populate("questionID userID", "questionTitle questionContent name email")
 
     if (!submissions) {
         return next(new ErrorResponse(`Submissions not found`, 404))
@@ -166,7 +164,9 @@ exports.getOneSubmission = asyncHandler(async (req, res, next) => {
     }).populate("questionID userID", "questionTitle questionContent name email")
 
     if (!submission) {
-        return next(new ErrorResponse(`Submission for question ${questionID} not found`, 404))
+        return next(
+            new ErrorResponse(`Submission for question ${questionID} not found`, 404)
+        )
     }
 
     res.status(200).json({
@@ -198,7 +198,9 @@ exports.deleteOneSubmission = asyncHandler(async (req, res, next) => {
     }).populate("questionID userID", "questionTitle questionContent name email")
 
     if (!submission) {
-        return next(new ErrorResponse(`Submission for question ${questionID} not found`, 404))
+        return next(
+            new ErrorResponse(`Submission for question ${questionID} not found`, 404)
+        )
     }
 
     await submission.remove()

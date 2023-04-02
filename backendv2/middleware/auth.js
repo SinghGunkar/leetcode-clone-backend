@@ -15,10 +15,13 @@ exports.protect = asyncHandler(async (req, res, next) => {
         indexOfToken = 1
         token = req.headers.authorization.split(" ")[indexOfToken]
     }
-    // Set token from cookie, disabled
-    // else if (req.cookies.token) {
-    //   token = req.cookies.token;
-    // }
+
+    /*
+    Set token from cookie, currently disabled. if a future dev wants to use req.cookies they can uncomment the code below
+    else if (req.cookies.token) {
+        token = req.cookies.token;
+    }
+    */
 
     if (!token) {
         return next(

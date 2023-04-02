@@ -5,7 +5,19 @@ const User = require("../models/User")
 const Submission = require("../models/Submission")
 
 exports.signUp = asyncHandler(async (req, res, next) => {
-    const { name, email, password, confirmPassword } = req.body
+    const { name, email, password } = req.body
+
+    if (!email) {
+        return next(new ErrorResponse("Please enter an email", 401))
+    }
+
+    if (!name) {
+        return next(new ErrorResponse("Please enter your name", 401))
+    }
+
+    if (!password) {
+        return next(new ErrorResponse("Please enter a password", 401))
+    }
 
     const user = await User.findOne({ email })
 
@@ -13,31 +25,11 @@ exports.signUp = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse("Email already in use", 401))
     }
 
-    // if (!password || !confirmPassword) {
-    //     return next(
-    //         new ErrorResponse("Please enter a password and confirmPassword", 401)
-    //     )
-    // }
-
-    if (!password) {
-        return next(
-            new ErrorResponse("Please enter a password", 401)
-        )
-    }
-
-    // if (password != confirmPassword) {
-    //     return next(
-    //         new ErrorResponse("Password and confirm password do not match", 401)
-    //     )
-    // }
-
     const newUser = await User.create({
         name,
         email,
         password
     })
-
-
 
     sendTokenResponse(newUser, 200, res)
 })
@@ -111,9 +103,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     const user = await User.findById(userID)
 
     if (!user) {
-        return next(
-            new ErrorResponse(`Question with id: ${userID} not found`, 404)
-        )
+        return next(new ErrorResponse(`Question with id: ${userID} not found`, 404))
     }
 
     await user.remove()

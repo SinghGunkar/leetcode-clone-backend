@@ -11,6 +11,8 @@ const helmet = require("helmet")
 const xss = require("xss-clean")
 const rateLimit = require("express-rate-limit")
 const hpp = require("hpp")
+const { send } = require("process")
+const e = require("express")
 
 dotenv.config({ path: "./config/config.env" })
 
@@ -24,15 +26,11 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-// app.use(cors())
-//CORS setting
-
-const { send } = require("process");
-const e = require("express");
-
-app.use(cors({
-    origin: '*'
-}));
+app.use(
+    cors({
+        origin: "*"
+    })
+)
 
 // development logging middleware
 if (process.env.NODE_ENV === "development") {
