@@ -3,6 +3,7 @@ import * as ace from "ace-builds";
 import { CallbackOneParam } from "./../interfaces";
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../environment';
+import { AbstractControl, FormControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-question-editor',
@@ -10,6 +11,7 @@ import { environment } from './../environment';
   styleUrls: ['./question-editor.component.css']
 })
 export class QuestionEditorComponent {
+
 
   @ViewChild('editor') editor: any;
 
@@ -19,10 +21,19 @@ export class QuestionEditorComponent {
   @ViewChild("codeEditor")
   private codeEditor!: ElementRef<HTMLElement>;
 
+  newQuestionForm!: FormGroup;
+
   public aceEditor: any
 
-  constructor(private http: HttpClient) {
 
+  questionTitle = '';
+  questionText = '';
+  questionCode = '';
+
+  constructor(private http: HttpClient, private fb: FormBuilder) {
+    this.newQuestionForm = this.fb.group({
+      course_name: new FormControl('', [Validators.required]),
+    })
   }
 
   ngAfterViewInit(): void {
@@ -42,22 +53,28 @@ export class QuestionEditorComponent {
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ 'font': [] }],
       ['bold', 'italic', 'underline'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }], 
-
-  
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'indent': '-1' }, { 'indent': '+1' }],
       [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      
       ['image', 'code-block']
     ],
-
-
   };
 
 
   logChange(event: any) {
-    console.log(this.editor);
+    // console.log(this.editor);
     console.log(event);
+    console.log(event.html);
+    this.questionText = event.html;
+    // console.log(this.editor.html)
+  }
+
+  submitQuestion() {
+    console.log(this.newQuestionForm.value.course_name)
+    console.log(this.questionText)
+    console.log(this.aceEditor.getSession().getValue())
+
+
   }
 
 }

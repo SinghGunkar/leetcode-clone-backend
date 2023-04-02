@@ -6,7 +6,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .card_ML {
     max-width: 80%;
-    margin: auto;
+    margin:10px auto 10px auto;
+    /* margin-top: 10px;
+    margin-bottom: 10px; */
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    
+}
+
+.full-width{
+    width: 100%;
 }
 .input-center {
     display: block;
@@ -36,4 +44,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     flex-direction: column;
     justify-content: center;
 
+}
+
+/* .button-row{
+    margin-right: 5px;
+} */
+
+.button-row button{
+    margin-right: 5px;
 }

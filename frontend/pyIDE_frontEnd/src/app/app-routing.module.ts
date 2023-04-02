@@ -1,3 +1,5 @@
+import { QuestionSetManagementComponent } from './question-set-management/question-set-management.component';
+import { CreateNewCourseComponent } from './create-new-course/create-new-course.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -14,7 +16,9 @@ const routes: Routes = [
   {path: 'dashboard', component:DashboardComponent},    // this is a route for the dashboard
   {path: '', component:LoginComponent},                 // root path --> login page
   {path: 'signup', component:SignupComponent},          // path to signup page  
-  {path: 'questionEditor',component:QuestionEditorComponent}
+  {path: 'questionEditor',component:QuestionEditorComponent},
+  {path: 'newCourse', component:CreateNewCourseComponent},
+  {path: 'course/questionSetManagement/:courseID', component:QuestionSetManagementComponent}
 ];
 
 

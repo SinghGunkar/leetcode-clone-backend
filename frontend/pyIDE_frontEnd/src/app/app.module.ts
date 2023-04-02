@@ -34,6 +34,15 @@ import { QuestionEditorComponent } from './question-editor/question-editor.compo
 
 import { QuillModule } from 'ngx-quill'
 import { QuillConfigModule } from 'ngx-quill/config';
+import { CreateNewCourseComponent } from './create-new-course/create-new-course.component';
+
+import { ReactiveFormsModule } from '@angular/forms';
+import {MatExpansionModule} from '@angular/material/expansion';
+
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { QuestionSetManagementComponent } from './question-set-management/question-set-management.component';
+
+
 
 @NgModule({
   declarations: [
@@ -48,6 +57,8 @@ import { QuillConfigModule } from 'ngx-quill/config';
     SignupComponent,
     FormSignupComponent,
     QuestionEditorComponent,
+    CreateNewCourseComponent,
+    QuestionSetManagementComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,6 +77,9 @@ import { QuillConfigModule } from 'ngx-quill/config';
     MatDialogModule,      // for authentication
     FormsModule,           // for authentication
     MatGridListModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatExpansionModule,
     QuillModule.forRoot(),
     QuillConfigModule.forRoot({
       modules: {
