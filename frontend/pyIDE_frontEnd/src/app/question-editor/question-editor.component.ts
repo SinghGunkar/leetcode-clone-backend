@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, Input,  ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, Input,  ChangeDetectorRef, HostListener } from '@angular/core';
 import * as ace from "ace-builds";
 import { CallbackOneParam } from "./../interfaces";
 import { HttpClient } from '@angular/common/http';
@@ -115,13 +115,8 @@ export class QuestionEditorComponent {
           let time = `${(date.getHours() + 1) % 13}:${date.getMinutes()} ${date.getHours() + 1 < 12 ? "AM" : "PM"}`
 
           this.lastModified = `Saved on:\t ${day} (${time})`
-        })
-        
+        })   
     }
-
-
-
-
   } // end of saveQuestion()
 
 
@@ -135,6 +130,20 @@ export class QuestionEditorComponent {
     } else if (this.qid !== undefined && !this.newChange) {
       this.router.navigate(['/dashboard']);
     }
-  }
+  } // end of cancel
+
+
+  
+  /**
+   * If the window is being reloaded or closed, show a warning that unsaved changes
+   * will be deleted
+   */
+  @HostListener('window:beforeunload', ['$event'])
+  onExit($event: any) {
+    if (this.newChange) {
+      return window.confirm("There are unsaved changes! Are you sure you want to exit?");
+    }
+    return true;
+  } // end of onExit()
 
 }

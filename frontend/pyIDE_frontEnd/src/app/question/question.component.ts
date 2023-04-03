@@ -42,12 +42,10 @@ export class QuestionComponent {
   ngOnInit(): void {
     this.route.params.subscribe((param: any) => {
       this.id = param.id;
-
       this.questionService.getQuestionByID(this.id, (question) => {
         this.questionTitle = question.QuestionTitle;
         this.questionContent = atob(question.Question);
-        
-        // this.questionContentBox.
+      
       })
     })
   }

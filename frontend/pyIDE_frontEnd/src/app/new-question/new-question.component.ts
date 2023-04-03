@@ -11,3 +11,5 @@ export class NewQuestionComponent {
   questionText:string = '';
   questionCode:string = '# Place the starter code here';
 }
+
+
