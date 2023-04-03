@@ -1,14 +1,33 @@
-<form class="auth-form">
-    <label mat-dialog-title>New Account</label>
-    <input mat-dialog-content placeholder="user name" class="input-center auth-input" type="text" required #username>
-    <input mat-dialog-content placeholder="email" class="input-center auth-input" type="text" required #email>
-    <span class="center" *ngIf="errorMsg" style="color:red">{{ errorMsg }}</span>
-    <input mat-dialog-content placeholder="password" class="input-center auth-input" type="password" required #password>
-    <input mat-dialog-content placeholder="confirm password" class="input-center auth-input" type="password" required
-        #confirm_password>
-    <mat-card-actions>
-        <button mat-raised-button
-            (click)="signup(username.value, email.value, password.value, confirm_password.value)">Signup</button><br>
-        <p routerLink="/" (click)="toLogin()">Already have an account? Log in here</p>
-    </mat-card-actions>
-</form>
+<mat-card>
+    <form class="auth-form">
+        <mat-card-header>
+            <mat-card-title>New Account</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <input mat-dialog-content placeholder="user name" class="input-center auth-input" type="text" required #username>
+        </mat-card-content>
+        
+        <mat-card-content>
+            <input mat-dialog-content placeholder="email" class="input-center auth-input" type="text" required #email>
+            <span class="center" *ngIf="errorMsg" style="color:red">{{ errorMsg }}</span>
+        </mat-card-content>
+ 
+        <mat-card-content>
+            <input mat-dialog-content placeholder="password" class="input-center auth-input" type="password" required #password>
+        </mat-card-content>
+
+        <mat-card-content>
+            <input mat-dialog-content placeholder="confirm password" class="input-center auth-input" type="password" required
+            #confirm_password>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-raised-button color="primary"
+                (click)="signup(username.value, email.value, password.value, confirm_password.value)">Signup
+            </button>
+            <button *ngIf="!isAuth" mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+        </mat-card-actions>
+        <p *ngIf="isAuth" routerLink="/" (click)="toLogin()">Already have an account? Log in here</p>
+    </form>
+</mat-card>

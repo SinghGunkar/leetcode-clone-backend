@@ -43,6 +43,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { QuestionSetManagementComponent } from './question-set-management/question-set-management.component';
 import { AdminCardComponent } from './admin-card/admin-card.component';
 import { NewQuestionComponent } from './new-question/new-question.component';
+import { ListUsersComponent } from './list-users/list-users.component';
 
 
 
@@ -63,6 +64,7 @@ import { NewQuestionComponent } from './new-question/new-question.component';
     QuestionSetManagementComponent,
     AdminCardComponent,
     NewQuestionComponent,
+    ListUsersComponent,
   ],
   imports: [
     BrowserModule,

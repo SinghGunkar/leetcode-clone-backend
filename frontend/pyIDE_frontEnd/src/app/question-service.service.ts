@@ -44,13 +44,13 @@ export class QuestionServiceService {
   freshQuestionList(callback: CallbackOneParam<any>) {
     const headers = this.auth.authTokenHeader();
     this.http.get(this.ENDPOINT + 'question/allQuestions', {headers}).subscribe((data: any) => {
-      console.log(data)
+      // console.log(data)
 
       let questions: any = [];
-      console.log('output:', data.data[0]._id)
+      // console.log('output:', data.data[0]._id)
 
       for (let i = 0; i < data.data.length; i++) {
-        console.log({ "QuestionId": `${(data.data[i]._id).toString()}`, "QuestionName": `${(data.data[i].questionTitle).toString()}` })
+        // console.log({ "QuestionId": `${(data.data[i]._id).toString()}`, "QuestionName": `${(data.data[i].questionTitle).toString()}` })
         questions.push({ "QuestionId": `${(data.data[i]._id).toString()}`, "QuestionName": `${(data.data[i].questionTitle).toString()}` })
       }
       this.questionList = questions
@@ -131,17 +131,6 @@ export class QuestionServiceService {
     },(error)=>{
       callback([false, error]);
     })
-
-
-
-  //   router.delete(
-  //     "/deleteQuestion/:questionID",
-  //     protect,
-  //     authorize("admin"),
-  //     deleteQuestion
-  // )
-  
-
   }
 
 
