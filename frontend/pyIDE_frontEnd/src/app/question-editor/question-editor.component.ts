@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, Input,  ChangeDetectorRef, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, Input, ChangeDetectorRef, HostListener } from '@angular/core';
 import * as ace from "ace-builds";
-import { CallbackOneParam } from "./../interfaces";
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../environment';
-import { AbstractControl, FormControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { QuestionServiceService } from './../question-service.service';
 import { Router } from '@angular/router';
@@ -13,13 +12,10 @@ import { Router } from '@angular/router';
   templateUrl: './question-editor.component.html',
   styleUrls: ['./question-editor.component.css']
 })
-export class QuestionEditorComponent {
+export class QuestionEditorComponent implements AfterViewInit{
 
 
   @ViewChild('editor') editor: any;
-
-  // @ViewChild("codeEditor")
-  // private codeEditor!: ElementRef<HTMLElement>;
 
   @ViewChild("codeEditor")
   private codeEditor!: ElementRef<HTMLElement>;
@@ -27,7 +23,6 @@ export class QuestionEditorComponent {
   questionForm!: FormGroup;
 
   public aceEditor: any
-
 
   @Input() questionTitle = '';
   @Input() questionText = '';
@@ -45,7 +40,6 @@ export class QuestionEditorComponent {
       title: new FormControl('', [Validators.required]),
       editor: new FormControl('')
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -78,48 +72,42 @@ export class QuestionEditorComponent {
   };
 
 
+  /**
+   * Keep track of changes made in the editor
+   * @param event 
+   */
   logChange(event: any) {
     this.newChange = true;
-    // console.log(this.editor);
-    console.log(event);
-    console.log(event.html);
     this.questionText = event.html;
-    // console.log(this.editor.html)
-  }
+  } // end of logChange()
 
   saveQuestion() {
-    console.log(this.questionForm.value.title)
-    console.log(this.questionForm.value.editor)
-    console.log(this.aceEditor.getSession().getValue())
-
     let title = this.questionForm.value.title
     let description = this.questionForm.value.editor.length < 1 ? "No description posted yet!" : this.questionForm.value.editor;
-    let code = this.aceEditor.getSession().getValue();
+    let code = this.aceEditor.getSession().getValue(); // To be implemented in the backend
 
-
-    
     if (this.qid === undefined) { // new question
       this.questionService.submitNewQuestion({"code": code, "description": description, "title": title },(response)=>{
-        console.log(response)
         this.router.navigate(['/dashboard']);
-      })
-      } else { // updating an existing question
-        this.lastModified = "Saving...";
-        this.questionService.updateQuestion({"qid": this.qid, "code": code, "description": description, "title": title },(response)=>{
-          console.log(response)
-          this.newChange = false;
-
-          const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-          let date = new Date()
-          let day = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-          let time = `${(date.getHours() + 1) % 13}:${date.getMinutes()} ${date.getHours() + 1 < 12 ? "AM" : "PM"}`
-
-          this.lastModified = `Saved on:\t ${day} (${time})`
-        })   
+      });
+    } else { // updating an existing question
+      this.lastModified = "Saving...";
+      this.questionService.updateQuestion({"qid": this.qid, "code": code, "description": description, "title": title },(response)=>{
+        this.newChange = false;
+        // show the time of the modification
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let date = new Date()
+        let day: string = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        let time: string = `${(date.getHours() + 1) % 13}:${date.getMinutes()} ${date.getHours() + 1 < 12 ? "AM" : "PM"}`;
+        this.lastModified = `Saved on:\t ${day} (${time})`;
+        });   
     }
   } // end of saveQuestion()
 
-
+  /**
+   * When button is clicked, warn the users if there is data that has not be explicitly saved yet.
+   * Return the user back to the dashboard
+   */
   cancel(){
     if (this.newChange) {
       if (window.confirm("This question will not be saved! Are you sure you want to leave this page?")) {
@@ -130,7 +118,7 @@ export class QuestionEditorComponent {
     } else if (this.qid !== undefined && !this.newChange) {
       this.router.navigate(['/dashboard']);
     }
-  } // end of cancel
+  } // end of cancel()
 
 
   
