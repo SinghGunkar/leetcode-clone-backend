@@ -9,6 +9,7 @@ import { LoginComponent } from './authentication/login/login.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { QuestionEditorComponent } from './question-editor/question-editor.component';
 import { NewQuestionComponent } from './new-question/new-question.component';
+import { ListUsersComponent } from './list-users/list-users.component';
 
 const routes: Routes = [
 
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: '', component:LoginComponent},                 // root path --> login page
   {path: 'signup', component:SignupComponent},          // path to signup page  
   {path: 'newQuestion', component:NewQuestionComponent}, // path to new question component
+  {path: 'viewUsers', component:ListUsersComponent},    // path to view the list of users
   {path: 'newCourse', component:CreateNewCourseComponent},
   {path: 'course/questionSetManagement/:courseID', component:QuestionSetManagementComponent}
 ];
