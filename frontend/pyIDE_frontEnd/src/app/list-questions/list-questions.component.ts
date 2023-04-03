@@ -41,7 +41,7 @@ export class ListQuestionsComponent {
   ngOnInit(): void {
     this.questionService.getQuestionsList((questionsList)=>{
       this.questionList = questionsList;
-      console.log(questionsList)
+      // console.log(questionsList)
     })
   }
 
