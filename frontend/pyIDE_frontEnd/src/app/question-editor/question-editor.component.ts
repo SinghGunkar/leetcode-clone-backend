@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, Input,  ChangeDetectorRef } from '@angular/core';
 import * as ace from "ace-builds";
 import { CallbackOneParam } from "./../interfaces";
 import { HttpClient } from '@angular/common/http';
@@ -24,20 +24,24 @@ export class QuestionEditorComponent {
   @ViewChild("codeEditor")
   private codeEditor!: ElementRef<HTMLElement>;
 
-  newQuestionForm!: FormGroup;
+  questionForm!: FormGroup;
 
   public aceEditor: any
 
 
-  questionTitle = '';
-  questionText = '';
-  questionCode = '';
+  @Input() questionTitle = '';
+  @Input() questionText = '';
+  @Input() questionCode = '';
 
-  constructor(private http: HttpClient, private fb: FormBuilder, private auth:AuthService, private questionService: QuestionServiceService,private router: Router) {
+  constructor(private http: HttpClient, private fb: FormBuilder, 
+              private auth:AuthService, private questionService: QuestionServiceService,
+              private router: Router,  private cdRef: ChangeDetectorRef   ) {
     this.auth.adminOnly();
-    this.newQuestionForm = this.fb.group({
-      course_name: new FormControl('', [Validators.required]),
-    })
+    this.questionForm = this.fb.group({
+      title: new FormControl('', [Validators.required]),
+      editor: new FormControl('')
+    });
+
   }
 
   ngAfterViewInit(): void {
@@ -46,9 +50,13 @@ export class QuestionEditorComponent {
     ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict'); //this may change later
     this.aceEditor = ace.edit(this.codeEditor.nativeElement);
 
-    this.aceEditor.session.setValue(`print("Hello world!")`);   //default value to print "Hello world!"
+    this.aceEditor.session.setValue(this.questionCode);         // default value to the current code question
     this.aceEditor.setTheme("ace/theme/twilight");              //set theme to twilight
     this.aceEditor.getSession().setMode("ace/mode/python");     //set mode to python
+
+    this.questionForm.controls["title"].setValue(this.questionTitle);
+    this.questionForm.controls["editor"].setValue(this.questionText);
+    this.cdRef.detectChanges(); 
   }
 
   modules = {
@@ -75,12 +83,12 @@ export class QuestionEditorComponent {
   }
 
   submitQuestion() {
-    console.log(this.newQuestionForm.value.course_name)
-    console.log(this.questionText)
+    console.log(this.questionForm.value.title)
+    console.log(this.questionForm.value.editor)
     console.log(this.aceEditor.getSession().getValue())
 
-    let title = this.newQuestionForm.value.course_name
-    let description = this.questionText;
+    let title = this.questionForm.value.title
+    let description = this.questionForm.value.editor;
     let code = this.aceEditor.getSession().getValue();
 
     this.questionService.submitNewQuestion({"code": code, "description": description, "title": title },(response)=>{
@@ -94,9 +102,9 @@ export class QuestionEditorComponent {
   }
 
   cancel(){
-    if (!this.newQuestionForm.valid) {
+    if (!this.questionForm.valid) {
       this.router.navigate(['/dashboard']);
-    } else if (this.newQuestionForm.valid) {
+    } else if (this.questionForm.valid) {
       if (window.confirm("This question will not be saved! Are you sure you want to leave this page?")) {
         this.router.navigate(['/dashboard']);
       } 

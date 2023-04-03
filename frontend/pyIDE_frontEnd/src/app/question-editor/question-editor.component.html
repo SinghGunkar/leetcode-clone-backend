@@ -1,6 +1,6 @@
-<app-toolbar></app-toolbar>
+<!-- <app-toolbar></app-toolbar> -->
 
-<mat-card class="card_ML">
+<!-- <mat-card class="card_ML"> -->
 
     <mat-card-header>
         <mat-card-title>Question Editor</mat-card-title>
@@ -8,7 +8,7 @@
 
 
     </mat-card-header>
-    <form class="" [formGroup]="newQuestionForm">
+    <form class="" [formGroup]="questionForm">
 
         <mat-card-content>
 
@@ -16,7 +16,7 @@
 
             <mat-form-field class="card-content">
                 <mat-label>Question Title</mat-label>
-                <input class="card-content " type="text" matInput formControlName="course_name">
+                <input class="card-content " type="text" matInput formControlName="title">
             </mat-form-field>
 
         </mat-card-content>
@@ -26,27 +26,21 @@
             <div class="ql-container ql-snow text-editor" style="border-width: 0;">
 
                 <quill-editor class="ql-editor" #editor [modules]="modules"
-                    (onContentChanged)="logChange($event);"></quill-editor>
+                    (onContentChanged)="logChange($event);" formControlName="editor"></quill-editor>
             </div>
         </mat-card-content>
 
-        <mat-card-content style="display: none;">
-            <mat-card-subtitle>Question Code</mat-card-subtitle>
-
+        <!-- <mat-card-content style="display: none;"> -->
+        <mat-card-content>
+            <mat-card-subtitle>Question Starter Code</mat-card-subtitle>
             <div class="code-card-box">
                 <div id="codeEditor" class="app-ace-editor" #codeEditor></div>
             </div>
-
-
         </mat-card-content>
 
-
-
-
-
         <mat-card-actions class="button-row">
-            <button mat-raised-button color="primary" [disabled]="!newQuestionForm.valid" (click)="submitQuestion()">Save</button>
+            <button mat-raised-button color="primary" [disabled]="!questionForm.valid" (click)="submitQuestion()">Save</button>
             <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
         </mat-card-actions>
     </form>
-</mat-card>
+<!-- </mat-card> -->
