@@ -19,6 +19,9 @@ import { AuthService } from 'src/app/auth.service';
 })
 export class FormSignupComponent {
   public errorMsg!: string; // display errors to the user
+  public isAuth: boolean;
+  private currentPath: string;
+  
 
 
   /**
@@ -27,8 +30,16 @@ export class FormSignupComponent {
   constructor(public dialogRef: MatDialogRef<FormSignupComponent>, 
             private server_api_at: AuthService,
             private router: Router) {
-    dialogRef.disableClose = true; // prevent closing when clicking outside the dialog
     this.errorMsg = "";
+    this.currentPath = this.router.url;
+    if (this.currentPath.localeCompare("/signup") === 0) {
+      dialogRef.disableClose = true; // prevent closing when clicking outside the dialog
+      this.isAuth = true;
+    } else {
+      dialogRef.disableClose = false; // prevent closing when clicking outside the dialog
+      this.isAuth = false;
+    }
+
   }
 
   ngOnInit(): void {}
@@ -62,17 +73,13 @@ export class FormSignupComponent {
 
     // login is valid
     this.server_api_at.signup(username, email, password).subscribe(data => {
-      // email already exists
-      // if (data.localeCompare("Email already in use") === 0) {
-      //   this.errorMsg = "Email Address is Already Registered!";
-      //   return;
-      // }
-      // creating a new account
-      // if (data.localeCompare("Registration Successful") === 0) {
-        console.log("Redirecting to login...");
-        this.router.navigate(['']);
-        this.dialogRef.close();
-      // }
+        if (this.currentPath.localeCompare("/signup") === 0) {
+          this.router.navigate(['']);
+          this.dialogRef.close();
+        } else if (this.currentPath.localeCompare("/viewUsers") === 0) {
+          this.router.navigate(['/viewUsers']);
+          this.dialogRef.close();
+        }
     },error =>{
       // catch error from backend and put in this.errorMsg
       // alert(error.error.error)
@@ -96,5 +103,9 @@ export class FormSignupComponent {
   public toLogin(): void {
     console.log("Redirecting to login page...");
     this.dialogRef.close()
+  }
+
+  public cancel(): void {
+    this.dialogRef.close();
   }
 } // end of class FormSignupComponent

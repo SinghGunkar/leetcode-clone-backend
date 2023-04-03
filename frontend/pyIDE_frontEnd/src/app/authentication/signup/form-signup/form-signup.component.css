@@ -9,3 +9,9 @@ p:hover {
     cursor: pointer;
     color: rgb(0, 200, 255);
 }
+
+mat-card-actions {
+    display: flex;
+    flex-direction: row;
+    column-gap: 1em;
+}
