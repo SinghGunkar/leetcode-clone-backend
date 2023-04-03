@@ -32,6 +32,7 @@ export class QuestionEditorComponent {
   @Input() questionTitle = '';
   @Input() questionText = '';
   @Input() questionCode = '';
+  @Input() newQuestion: boolean = false; // check if the requested question is new
 
   constructor(private http: HttpClient, private fb: FormBuilder, 
               private auth:AuthService, private questionService: QuestionServiceService,
@@ -88,7 +89,7 @@ export class QuestionEditorComponent {
     console.log(this.aceEditor.getSession().getValue())
 
     let title = this.questionForm.value.title
-    let description = this.questionForm.value.editor;
+    let description = this.questionForm.value.editor.length < 1 ? "No description posted yet!" : this.questionForm.value.editor;
     let code = this.aceEditor.getSession().getValue();
 
     this.questionService.submitNewQuestion({"code": code, "description": description, "title": title },(response)=>{

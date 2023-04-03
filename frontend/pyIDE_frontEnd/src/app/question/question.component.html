@@ -1,6 +1,14 @@
 <app-toolbar></app-toolbar>
 
 <!-- <app-question-editor *ngIf="isAdmin"></app-question-editor> -->
+<mat-card>
+  <app-question-editor *ngIf="isAdmin && questionTitle && questionContent" 
+                        [questionTitle]="questionTitle"
+                        [questionText]="questionContent"
+                        [newQuestion]="newQuestion">
+</app-question-editor>
+
+</mat-card>
 
 <mat-card *ngIf="!isAdmin">
     <mat-card-header>

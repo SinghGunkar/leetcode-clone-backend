@@ -7,8 +7,9 @@ import { Component } from '@angular/core';
 })
 export class NewQuestionComponent {
 
-  questionTitle = '';
-  questionText = '';
-  questionCode = '# Place the starter code here';
+  questionTitle:string = '';
+  questionText:string = '';
+  questionCode:string = '# Place the starter code here';
+  newQuestion:boolean = true;
 
 }

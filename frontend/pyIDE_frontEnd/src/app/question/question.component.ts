@@ -14,8 +14,10 @@ import { AuthService } from '../auth.service';
 export class QuestionComponent {
   id: any;
   data: any;
+
   questionTitle: string;
   questionContent: string;
+  newQuestion: boolean = false;
 
   role: string;
   isAdmin: boolean;
