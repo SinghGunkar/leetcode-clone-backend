@@ -52,6 +52,9 @@ export class ListUsersComponent {
       width: "50%",
       position: {top: "15%", left: "25%"},
     });
+    d.afterClosed().subscribe(res => {
+      window.location.reload();
+    });
 
   }
 

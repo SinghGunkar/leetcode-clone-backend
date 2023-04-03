@@ -40,23 +40,6 @@ export class UsersService {
   } // end of freshUsersList()
 
 
-  addUser(user: any, callback: CallbackOneParam<any>) {
-    this.auth.adminOnly();
-    let name = '' + user.name;
-    let email = '' + user.email;
-    let password = '' + user.password;
-    const headers = this.auth.authTokenHeader();
-
-    this.http.post<any>(this.ENDPOINT + "user/signUP",{"name":name, "email":email, "password":password}, { headers }).subscribe((data) => {
-      console.log(data);
-      callback(data);
-      return;
-    },(error)=>{
-      console.log(error)
-      callback(error)
-    })
-  }
-
 
   // deleteUser(uid: string, callback: CallbackOneParam<any>) {
   //   this.auth.adminOnly();
