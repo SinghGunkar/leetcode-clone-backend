@@ -18,7 +18,6 @@ const routes: Routes = [
   {path: '', component:LoginComponent},                 // root path --> login page
   {path: 'signup', component:SignupComponent},          // path to signup page  
   {path: 'newQuestion', component:NewQuestionComponent}, // path to new question component
-  {path: 'questionEditor',component:QuestionEditorComponent},
   {path: 'newCourse', component:CreateNewCourseComponent},
   {path: 'course/questionSetManagement/:courseID', component:QuestionSetManagementComponent}
 ];
