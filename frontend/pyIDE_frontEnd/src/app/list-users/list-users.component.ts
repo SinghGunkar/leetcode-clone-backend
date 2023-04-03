@@ -36,15 +36,21 @@ export class ListUsersComponent {
   ngOnInit() {
     this.userService.getUserList((userList) => {
       this.userList = userList;
-      console.log(this.userList);
     });
   }
 
   deleteUser(uid: string): void {
-    console.log("delete");
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      this.userService.deleteUser(uid, (response: any)=>{
+        if(response[0] == true){
+          window.location.reload();
+        }else{
+          alert(JSON.stringify(response[1]))
+        }
+      });
+    }
   } // end of deleteUser()
 
-  displayedColumns: string[] = ["name", "email", "id"]
 
 
   newUser() {
@@ -56,6 +62,7 @@ export class ListUsersComponent {
       window.location.reload();
     });
 
-  }
+  } // end of newUser()
 
+  displayedColumns: string[] = ["name", "email", "id"]
 }

@@ -41,17 +41,17 @@ export class UsersService {
 
 
 
-  // deleteUser(uid: string, callback: CallbackOneParam<any>) {
-  //   this.auth.adminOnly();
-  //   const headers = this.auth.authTokenHeader();
+  deleteUser(uid: string, callback: CallbackOneParam<any>) {
+    this.auth.adminOnly();
+    const headers = this.auth.authTokenHeader();
 
-  //   this.http.delete<any>(this.ENDPOINT + "user/delete/" + uid.toString(), { headers })
-  //   .subscribe((response)=>{
-  //     callback([true, null]);
-  //   },(error)=>{
-  //     callback([false, error]);
-  //   })
-  // }
+    this.http.delete<any>(this.ENDPOINT + "user/deleteUser/" + uid, { headers })
+    .subscribe((response)=>{
+      callback([true, null]);
+    },(error)=>{
+      callback([false, error]);
+    })
+  }
 
 
 }
