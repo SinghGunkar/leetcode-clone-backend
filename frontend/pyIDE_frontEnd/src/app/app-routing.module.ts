@@ -8,6 +8,7 @@ import { CodePanelComponent } from './code-panel/code-panel.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { QuestionEditorComponent } from './question-editor/question-editor.component';
+import { NewQuestionComponent } from './new-question/new-question.component';
 
 const routes: Routes = [
 
@@ -16,7 +17,7 @@ const routes: Routes = [
   {path: 'dashboard', component:DashboardComponent},    // this is a route for the dashboard
   {path: '', component:LoginComponent},                 // root path --> login page
   {path: 'signup', component:SignupComponent},          // path to signup page  
-  {path: 'questionEditor',component:QuestionEditorComponent},
+  {path: 'newQuestion', component:NewQuestionComponent}, // path to new question component
   {path: 'newCourse', component:CreateNewCourseComponent},
   {path: 'course/questionSetManagement/:courseID', component:QuestionSetManagementComponent}
 ];

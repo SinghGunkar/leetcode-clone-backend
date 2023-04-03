@@ -42,6 +42,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { QuestionSetManagementComponent } from './question-set-management/question-set-management.component';
 import { AdminCardComponent } from './admin-card/admin-card.component';
+import { NewQuestionComponent } from './new-question/new-question.component';
 
 
 
@@ -61,6 +62,7 @@ import { AdminCardComponent } from './admin-card/admin-card.component';
     CreateNewCourseComponent,
     QuestionSetManagementComponent,
     AdminCardComponent,
+    NewQuestionComponent,
   ],
   imports: [
     BrowserModule,

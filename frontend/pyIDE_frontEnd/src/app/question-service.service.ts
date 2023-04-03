@@ -146,6 +146,34 @@ export class QuestionServiceService {
 
 
 
+  updateQuestion(question:any, callback:CallbackOneParam<any>){
+    this.auth.adminOnly();
+    let qid = '' + question.qid;
+    let title = '' + question.title;
+    let description = '' + question.description;
+    // let code = '' + question.code;
+
+    // console.log("description",description)
+    // let questionContent = {"description": description.toString(), "code":code.toString()};
+    // // const buf = Buffer.from(btoa(description),'base64')
+    // console.log('base64',btoa(description))
+    // console.log('bta',atob(btoa(description)))
+
+    const headers = this.auth.authTokenHeader();
+
+    this.http.put<any>(this.ENDPOINT + "question/updateQuestion/" + qid,{"questionTitle":title,"questionContent":btoa(description)}, { headers }).subscribe((data) => {
+      console.log(data);
+
+      callback(data);
+      return;
+    },(error)=>{
+      console.log(error)
+      callback(error)
+    })
+  }
+
+
+
 
 
 }
