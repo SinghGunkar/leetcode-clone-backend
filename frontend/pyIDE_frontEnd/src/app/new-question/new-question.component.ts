@@ -10,6 +10,4 @@ export class NewQuestionComponent {
   questionTitle:string = '';
   questionText:string = '';
   questionCode:string = '# Place the starter code here';
-  newQuestion:boolean = true;
-
 }

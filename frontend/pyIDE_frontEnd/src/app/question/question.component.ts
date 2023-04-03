@@ -17,7 +17,7 @@ export class QuestionComponent {
 
   questionTitle: string;
   questionContent: string;
-  newQuestion: boolean = false;
+  newQuestion: boolean = false; 
 
   role: string;
   isAdmin: boolean;

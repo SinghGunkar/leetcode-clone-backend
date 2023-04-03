@@ -32,7 +32,10 @@ export class QuestionEditorComponent {
   @Input() questionTitle = '';
   @Input() questionText = '';
   @Input() questionCode = '';
-  @Input() newQuestion: boolean = false; // check if the requested question is new
+  @Input() qid: string | undefined; // check if the requested question is new
+
+  newChange: boolean = false;
+  lastModified: string = '';
 
   constructor(private http: HttpClient, private fb: FormBuilder, 
               private auth:AuthService, private questionService: QuestionServiceService,
@@ -56,7 +59,7 @@ export class QuestionEditorComponent {
     this.aceEditor.getSession().setMode("ace/mode/python");     //set mode to python
 
     this.questionForm.controls["title"].setValue(this.questionTitle);
-    this.questionForm.controls["editor"].setValue(this.questionText);
+    this.questionForm.controls["editor"].setValue(this.questionText); 
     this.cdRef.detectChanges(); 
   }
 
@@ -76,6 +79,7 @@ export class QuestionEditorComponent {
 
 
   logChange(event: any) {
+    this.newChange = true;
     // console.log(this.editor);
     console.log(event);
     console.log(event.html);
@@ -83,7 +87,7 @@ export class QuestionEditorComponent {
     // console.log(this.editor.html)
   }
 
-  submitQuestion() {
+  saveQuestion() {
     console.log(this.questionForm.value.title)
     console.log(this.questionForm.value.editor)
     console.log(this.aceEditor.getSession().getValue())
@@ -92,23 +96,44 @@ export class QuestionEditorComponent {
     let description = this.questionForm.value.editor.length < 1 ? "No description posted yet!" : this.questionForm.value.editor;
     let code = this.aceEditor.getSession().getValue();
 
-    this.questionService.submitNewQuestion({"code": code, "description": description, "title": title },(response)=>{
-      console.log(response)
-      this.router.navigate(['/dashboard']);
-    })
 
     
+    if (this.qid === undefined) { // new question
+      this.questionService.submitNewQuestion({"code": code, "description": description, "title": title },(response)=>{
+        console.log(response)
+        this.router.navigate(['/dashboard']);
+      })
+      } else { // updating an existing question
+        this.lastModified = "Saving...";
+        this.questionService.updateQuestion({"qid": this.qid, "code": code, "description": description, "title": title },(response)=>{
+          console.log(response)
+          this.newChange = false;
+
+          const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          let date = new Date()
+          let day = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+          let time = `${(date.getHours() + 1) % 13}:${date.getMinutes()} ${date.getHours() + 1 < 12 ? "AM" : "PM"}`
+
+          this.lastModified = `Saved on:\t ${day} (${time})`
+        })
+        
+    }
 
 
-  }
+
+
+  } // end of saveQuestion()
+
 
   cancel(){
-    if (!this.questionForm.valid) {
-      this.router.navigate(['/dashboard']);
-    } else if (this.questionForm.valid) {
+    if (this.newChange) {
       if (window.confirm("This question will not be saved! Are you sure you want to leave this page?")) {
         this.router.navigate(['/dashboard']);
       } 
+    } else if (!this.questionForm.valid) {
+      this.router.navigate(['/dashboard']);
+    } else if (this.qid !== undefined && !this.newChange) {
+      this.router.navigate(['/dashboard']);
     }
   }
 
