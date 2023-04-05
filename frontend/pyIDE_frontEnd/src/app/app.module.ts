@@ -45,7 +45,7 @@ import { AdminCardComponent } from './admin-card/admin-card.component';
 import { NewQuestionComponent } from './new-question/new-question.component';
 import { ListUsersComponent } from './list-users/list-users.component';
 
-
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -94,7 +94,7 @@ import { ListUsersComponent } from './list-users/list-users.component';
     })
     
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
