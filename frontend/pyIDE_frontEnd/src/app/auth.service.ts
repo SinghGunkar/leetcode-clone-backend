@@ -63,6 +63,21 @@ export class AuthService {
     })
   }
 
+
+  public logout(){
+    localStorage.clear();
+    sessionStorage.clear();
+    let url: string = this.server_api + "user/logout";
+    this.http.post<any>(url,{}).subscribe((response) => {
+      // console.log(response);
+      this.router.navigate(['/']);
+    },(error)=>{
+      console.log(error);
+      this.router.navigate(['/']);
+    })
+
+  }
+
   authTokenHeader(): HttpHeaders {
     let token = sessionStorage.getItem("token");
     let headers = new HttpHeaders({ 'Authorization': 'Bearer ' + token?.toString() })
