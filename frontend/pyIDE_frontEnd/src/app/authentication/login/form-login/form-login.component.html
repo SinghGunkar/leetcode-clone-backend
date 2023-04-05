@@ -1,7 +1,7 @@
-<mat-card>
+<mat-card class="auth-card">
 <form class="auth-form">
-    <mat-card-header>
-    <label mat-dialog-title>Welcome Back</label>        
+    <mat-card-header>   
+    <mat-card-title>Welcome Back</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
@@ -13,10 +13,11 @@
         <input mat-dialog-content placeholder="password" class="input-center auth-input" type="password" required #password>
     </mat-card-content>
 
-    <mat-card-actions>
-        <button mat-raised-button (click)="login(email.value, password.value)">Login</button><br>
-    </mat-card-actions>
-    <p routerLink="/signup" (click)="toSignUp()">Create an account here</p>
+    <mat-card-content>
+        <button mat-raised-button color="primary" (click)="login(email.value, password.value)"><mat-icon>perm_identity</mat-icon>SignIn</button>
+        <button mat-raised-button (click)="toSignUp()" routerLink="/signup"><mat-icon>add</mat-icon>SignUp</button><br>
+    </mat-card-content>
+    <!-- <p routerLink="/signup" (click)="toSignUp()">Create an account here</p> -->
 
 </form>
 </mat-card>

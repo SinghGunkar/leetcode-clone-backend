@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="auth-card">
     <form class="auth-form">
         <mat-card-header>
             <mat-card-title>New Account</mat-card-title>
@@ -22,12 +22,13 @@
             #confirm_password>
         </mat-card-content>
 
-        <mat-card-actions>
+        <mat-card-content>
             <button mat-raised-button color="primary"
-                (click)="signup(username.value, email.value, password.value, confirm_password.value)">Signup
+                (click)="signup(username.value, email.value, password.value, confirm_password.value)"><mat-icon>assignment_turned_in</mat-icon>SignUp
             </button>
-            <button *ngIf="!isAuth" mat-raised-button color="warn" (click)="cancel()">Cancel</button>
-        </mat-card-actions>
-        <p *ngIf="isAuth" routerLink="/" (click)="toLogin()">Already have an account? Log in here</p>
+            <button *ngIf="!isAuth" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+            <button *ngIf="isAuth" mat-raised-button (click)="toLogin()" routerLink="/"><mat-icon>arrow_back</mat-icon>Back</button><br>
+        </mat-card-content>
+        <!-- <p *ngIf="isAuth" routerLink="/" (click)="toLogin()">Already have an account? Log in here</p> -->
     </form>
 </mat-card>
