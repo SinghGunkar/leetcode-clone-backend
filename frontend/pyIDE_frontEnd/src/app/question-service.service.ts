@@ -5,6 +5,7 @@ import { environment } from './environment';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 
+/**
 // questionList should be look like
 // questionList = 
 //   [
@@ -19,6 +20,7 @@ import { Router } from '@angular/router';
 // const q2 = { QuestionID: "2", Question: 'This is a question', QuestionTitle: "Q1", code: "print('this is q1')" }
 // const q3 = { QuestionID: "3", Question: 'This is a question', QuestionTitle: "Q1", code: "print('this is q1')" }
 // const q4 = { QuestionID: "4", Question: 'This is a question', QuestionTitle: "Q1", code: "print('this is q1')" }
+*/
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +33,7 @@ export class QuestionServiceService {
   private ENDPOINT = environment.backendEndpoint;
   public questionList: any = []
 
-  constructor(private http: HttpClient, private auth:AuthService,private router: Router) {
+  constructor(private http: HttpClient, private auth: AuthService, private router: Router) {
   }
 
   getQuestionsList(callback: CallbackOneParam<any>) {
@@ -40,10 +42,12 @@ export class QuestionServiceService {
     })
   }
 
-  //Update this.questionList from backend
+/**
+ * Update this.questionList from backend
+ */
   freshQuestionList(callback: CallbackOneParam<any>) {
     const headers = this.auth.authTokenHeader();
-    this.http.get(this.ENDPOINT + 'question/allQuestions', {headers}).subscribe((data: any) => {
+    this.http.get(this.ENDPOINT + 'question/allQuestions', { headers }).subscribe((data: any) => {
       // console.log(data)
 
       let questions: any = [];
@@ -74,12 +78,16 @@ export class QuestionServiceService {
     return "No Name"
   }
 
+  /**
+   * Search the question by ID form this.question.list
+   * @param id 
+   */
   getQuestionByID(id: number, callback: CallbackOneParam<any>) {
     const headers = this.auth.authTokenHeader();
     this.freshQuestionList(() => {
 
       this.http.get(
-        this.ENDPOINT + 'question/getQuestion/' + `${'' + id.toString()}`, {headers}
+        this.ENDPOINT + 'question/getQuestion/' + `${'' + id.toString()}`, { headers }
       ).subscribe((data: any) => {
         console.log("quesHTML:", data.data.questionContent)
         callback({ QuestionID: `${id}`, Question: `${data.data.questionContent}`, QuestionTitle: `${data.data.questionTitle}`, code: `` })
@@ -88,107 +96,76 @@ export class QuestionServiceService {
     });
   }
 
-  submitNewQuestion(question:any, callback:CallbackOneParam<any>){
+  /**
+   * Submit the question to the backend
+   * @param question 
+   * @param callback 
+   */
+  submitNewQuestion(question: any, callback: CallbackOneParam<any>) {
     this.auth.adminOnly();
     let title = '' + question.title;
     let description = '' + question.description;
 
     let code = '' + question.code;
 
-    console.log("description",description)
-    let questionContent = {"description": description.toString(), "code":code.toString()};
-    // const buf = Buffer.from(btoa(description),'base64')
-    console.log('base64',btoa(description))
-    console.log('bta',atob(btoa(description)))
-
-
+    console.log("description", description)
+    let questionContent = { "description": description.toString(), "code": code.toString() };
+    console.log('base64', btoa(description))    //code the question into base64
+    console.log('bta', atob(btoa(description)))
 
     const headers = this.auth.authTokenHeader();
 
-    this.http.post<any>(this.ENDPOINT + "question/createQuestion",{"questionTitle":title,"questionContent":btoa(description)}, { headers }).subscribe((data) => {
+    this.http.post<any>(this.ENDPOINT + "question/createQuestion", { "questionTitle": title, "questionContent": btoa(description) }, { headers }).subscribe((data) => {
       console.log(data);
 
       callback(data);
       return;
-    },(error)=>{
+    }, (error) => {
       console.log(error)
       callback(error)
     })
   }
 
-
-  deleteQuestion(QID:string, callback:CallbackOneParam<any>){
+  /**
+   * delete the question by ID
+   * @param question ID 
+   * @param callback 
+   */
+  deleteQuestion(QID: string, callback: CallbackOneParam<any>) {
     this.auth.adminOnly();
 
     const headers = this.auth.authTokenHeader();
 
     this.http.delete<any>(this.ENDPOINT + "question/deleteQuestion/" + QID.toString(), { headers })
-    .subscribe((response)=>{
-      // this.router.navigate(['/']);
-      // window.location.reload();
-      callback([true, null]);
+      .subscribe((response) => {
+        callback([true, null]);
 
-    },(error)=>{
-      callback([false, error]);
-    })
+      }, (error) => {
+        callback([false, error]);
+      })
   }
 
-
-
-  updateQuestion(question:any, callback:CallbackOneParam<any>){
+  /**
+   * update the question by ID
+   * @param question 
+   * @param callback 
+   */
+  updateQuestion(question: any, callback: CallbackOneParam<any>) {
     this.auth.adminOnly();
     let qid = '' + question.qid;
     let title = '' + question.title;
     let description = '' + question.description;
-    // let code = '' + question.code;
-
-    // console.log("description",description)
-    // let questionContent = {"description": description.toString(), "code":code.toString()};
-    // // const buf = Buffer.from(btoa(description),'base64')
-    // console.log('base64',btoa(description))
-    // console.log('bta',atob(btoa(description)))
 
     const headers = this.auth.authTokenHeader();
 
-    this.http.put<any>(this.ENDPOINT + "question/updateQuestion/" + qid,{"questionTitle":title,"questionContent":btoa(description)}, { headers }).subscribe((data) => {
+    this.http.put<any>(this.ENDPOINT + "question/updateQuestion/" + qid, { "questionTitle": title, "questionContent": btoa(description) }, { headers }).subscribe((data) => {
       console.log(data);
 
       callback(data);
       return;
-    },(error)=>{
+    }, (error) => {
       console.log(error)
       callback(error)
     })
   }
-
-
-
-
-
 }
-
-// this.http.post<any>(url, data).subscribe((response) => {
-//   console.log(response);
-//   let result = response;
-//   if (result && result.token) {
-
-//     console.log(result.token)
-//     sessionStorage.setItem('token', result.token);
-//     const headers = this.authTokenHeader();
-//     // localStorage.setItem('token', result.token);
-//     this.http.get<any>(this.server_api + "user/getLoggedInUser", { headers }).subscribe((user_data) => {
-//       console.log(user_data);
-//       sessionStorage.setItem('role', user_data.data.role);
-//       sessionStorage.setItem('_id', user_data.data._id);
-//       sessionStorage.setItem('name', user_data.data.name);
-//       sessionStorage.setItem('email', user_data.data.email);
-//       callback(true);
-//       return;
-//     })
-//   }
-//   callback(false)
-//   return;
-// }, (err) => {
-//   callback(false)
-//   return;
-// })

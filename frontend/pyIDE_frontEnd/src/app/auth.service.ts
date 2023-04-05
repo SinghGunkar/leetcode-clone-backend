@@ -31,7 +31,6 @@ export class AuthService {
    * Check that the user exists in the db
    * @param user        email of the user
    * @param password    password for the user
-   * @returns           a string stating if the request was successful or if it failed
    */
   public login(user: string, password: string, callback: CallbackOneParam<any>) {
     let url: string = this.server_api + "user/login";
@@ -44,7 +43,6 @@ export class AuthService {
         console.log(result.token)
         sessionStorage.setItem('token', result.token);
         const headers = this.authTokenHeader();
-        // localStorage.setItem('token', result.token);
         this.http.get<any>(this.server_api + "user/getLoggedInUser", { headers }).subscribe((user_data) => {
           console.log(user_data);
           sessionStorage.setItem('role', user_data.data.role);
@@ -63,13 +61,14 @@ export class AuthService {
     })
   }
 
-
+  /**
+   * send a logout request to backend and clear local storage and session
+   */
   public logout(){
     localStorage.clear();
     sessionStorage.clear();
     let url: string = this.server_api + "user/logout";
     this.http.post<any>(url,{}).subscribe((response) => {
-      // console.log(response);
       this.router.navigate(['/']);
     },(error)=>{
       console.log(error);
@@ -78,6 +77,10 @@ export class AuthService {
 
   }
 
+  /**
+   * Get the authTokenHeader
+   * @returns           a string stating that contains current user's authTokenHeader
+   */
   authTokenHeader(): HttpHeaders {
     let token = sessionStorage.getItem("token");
     let headers = new HttpHeaders({ 'Authorization': 'Bearer ' + token?.toString() })
@@ -88,6 +91,10 @@ export class AuthService {
     return headers;
   }
 
+  /**
+   * Get the authToken
+   * @returns           a string stating that contains current user's authToken
+   */
   getAuthToken() {
     let token = sessionStorage.getItem("token");
     if (!token) {
@@ -97,8 +104,11 @@ export class AuthService {
     return token;
   }
 
+  /**
+   * Get current user's UID
+   * @returns           a string stating that contains current user's UID
+   */
   getUID(){
-
     let uid = sessionStorage.getItem('_id');
     if (!uid){
       this.router.navigate(['/']);
@@ -107,6 +117,10 @@ export class AuthService {
     return uid;
   }
   
+  /**
+   * Get current user's user type
+   * @returns           a string stating that contains current user's user type
+   */
   getUserType(){
     let role = sessionStorage.getItem('role');
     if (!role){
@@ -116,6 +130,10 @@ export class AuthService {
     return role;
   }
 
+  /**
+   * Get current user's user email
+   * @returns           a string stating that contains current user's user email
+   */
   getEmail(){
     let email = sessionStorage.getItem('email');
     if (!email){
@@ -125,6 +143,10 @@ export class AuthService {
     return email;
   }
 
+  /**
+   * Get current user's username
+   * @returns           a string stating that contains current user's username
+   */
   getUserName(){
     let email = sessionStorage.getItem('email');
     if (!email){
@@ -134,6 +156,10 @@ export class AuthService {
     return email;
   }
 
+  /**
+   * Check if this user is admin
+   * @returns           return true is the user is admin otherwise return false and redirect to login page
+   */
   adminOnly(){
     let role = sessionStorage.getItem('role');
     if (role == 'admin'){
