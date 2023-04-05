@@ -24,6 +24,7 @@ const submissionRoutes = require("./routes/submission")
 const questionRoutes = require("./routes/question")
 
 const app = express()
+app.use(express.static("./public"))
 
 app.use(express.json())
 app.use(cookieParser())
@@ -56,6 +57,11 @@ app.use(limiter)
 app.use("/user", userRoutes)
 app.use("/submission", submissionRoutes)
 app.use("/question", questionRoutes)
+
+//404
+app.get('*', function(req, res){
+    res.redirect("/index.html")
+});
 
 app.use(errorHandler)
 app.use(routeNotFound)
