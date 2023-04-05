@@ -1,8 +1,9 @@
 # CMPT 372 - Group 17: Web IDE
 
 ## Link to Application
+url:https://372asn.wzy990888.net/#/
 url:http://372asn.wzy990888.net/#/
-url:http://372asn.wzy990888.net/#/dashboard
+
 
 
 
