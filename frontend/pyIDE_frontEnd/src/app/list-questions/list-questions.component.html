@@ -1,30 +1,36 @@
 <mat-card class="card_ML">
-    <mat-card-header>
-        <mat-card-title>All Questions</mat-card-title>
-    </mat-card-header>
-    
-    <mat-card-content>
-        <table mat-table  [dataSource]="questionList" class="question-table">          
-            <ng-container matColumnDef="title">
-              <th mat-header-cell *matHeaderCellDef> Title </th>
-              <td mat-cell *matCellDef="let element"> {{element.QuestionName}} </td>
-            </ng-container>
-            <span class="spacer"></span>
-            <!-- <ng-container matColumnDef="created_date">
+  <mat-card-header>
+    <mat-card-title>All Questions</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <table mat-table [dataSource]="questionList" class="question-table">
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef> Title </th>
+        <td mat-cell *matCellDef="let element"> {{element.QuestionName}} </td>
+      </ng-container>
+      <span class="spacer"></span>
+      <!-- <ng-container matColumnDef="created_date">
               <th mat-header-cell *matHeaderCellDef> Create Date </th>
               <td mat-cell *matCellDef="let element"> {{element.created_date | date:'medium'}} </td>
             </ng-container> -->
-            <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef> Action </th>
-              <td mat-cell *matCellDef="let element" style="width: 15%;">
-                 <div class="button-row button-list table-button button-box">
-                <button mat-raised-button color="primary" routerLink='/question/{{element.QuestionId}}'>View</button>
-                <button *ngIf="isAdmin" mat-raised-button color="warn" (click)="deleteQuestion(element.QuestionId)">Delete</button>
-              </div>                
-            </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-    </mat-card-content>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element" style="width: 15%;">
+          <div class="button-box">
+            <div class="button-row">
+              <button mat-raised-button color="primary" routerLink='/question/{{element.QuestionId}}'>
+                <mat-icon>pageview</mat-icon>View</button>
+              <button *ngIf="isAdmin" mat-raised-button color="warn" (click)="deleteQuestion(element.QuestionId)">
+                <mat-icon>delete_outline</mat-icon>Delete</button>
+              <button *ngIf="isAdmin" mat-raised-button color="accent" routerLink='/submissions/{{element.QuestionId}}'>
+                <mat-icon>insert_drive_file</mat-icon>Submissions</button>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
 </mat-card>

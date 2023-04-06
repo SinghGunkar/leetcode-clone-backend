@@ -10,15 +10,20 @@
 
     <mat-card-content class="card-container">
         <form class="" [formGroup]="stdInputForm">
-        <mat-form-field class="example-full-width" style="width:100%">
-            <mat-label>Stranded Input</mat-label>
-            <textarea matInput formControlName="stdInput" placeholder="Put your input value here before click run."></textarea>
-        </mat-form-field>
+            <mat-form-field class="example-full-width" style="width:100%">
+                <mat-label>Stranded Input</mat-label>
+                <textarea matInput formControlName="stdInput"
+                    placeholder="Put your input value here before click run."></textarea>
+            </mat-form-field>
         </form>
     </mat-card-content>
     <mat-card-content class="button-row card-container">
-        <button mat-raised-button color="primary" (click)="onSubmit()">
+        <button mat-raised-button color="primary" (click)="run()">
             <mat-icon>play_arrow</mat-icon> RUN
+        </button>
+
+        <button mat-raised-button color="primary" (click)="onSubmit()">
+            <mat-icon>save</mat-icon> SAVE
         </button>
 
         <button mat-raised-button color="warn" (click)="refresh()">
@@ -33,15 +38,15 @@
             <mat-icon>cloud_upload</mat-icon> Upload File
         </button>
     </mat-card-content>
-    <mat-card-content *ngIf="show_upload"  class="upload-card card-container">
+    <mat-card-content *ngIf="show_upload" class="upload-card card-container">
 
 
         <label for="uploader" class="drop-container">
             <span class="drop-title">Select files here</span>
             <!-- or -->
-            <input type="file" id="uploader" accept=".py" (change)="onChange($event)" class="upload-input" >
+            <input type="file" id="uploader" accept=".py" (change)="onChange($event)" class="upload-input">
             <button (click)="onUpload()" mat-raised-button color="primary">Submit</button>
-          </label>
+        </label>
 
     </mat-card-content>
 

@@ -10,18 +10,20 @@ import { SignupComponent } from './authentication/signup/signup.component';
 import { QuestionEditorComponent } from './question-editor/question-editor.component';
 import { NewQuestionComponent } from './new-question/new-question.component';
 import { ListUsersComponent } from './list-users/list-users.component';
+import { ViewSubmissionsComponent } from './view-submissions/view-submissions.component';
 
 const routes: Routes = [
 
-  {path: 'code', component:CodePanelComponent},         // this is a route for the code panel playground
-  {path: 'question/:id', component:QuestionComponent},  // this is a route for the question page, id is the question id
-  {path: 'dashboard', component:DashboardComponent},    // this is a route for the dashboard
-  {path: '', component:LoginComponent},                 // root path --> login page
-  {path: 'signup', component:SignupComponent},          // path to signup page  
-  {path: 'newQuestion', component:NewQuestionComponent}, // path to new question component
-  {path: 'viewUsers', component:ListUsersComponent},    // path to view the list of users
-  {path: 'newCourse', component:CreateNewCourseComponent},
-  {path: 'course/questionSetManagement/:courseID', component:QuestionSetManagementComponent}
+  { path: 'code', component: CodePanelComponent },         // this is a route for the code panel playground
+  { path: 'question/:id', component: QuestionComponent },  // this is a route for the question page, id is the question id
+  { path: 'dashboard', component: DashboardComponent },    // this is a route for the dashboard
+  { path: '', component: LoginComponent },                 // root path --> login page
+  { path: 'signup', component: SignupComponent },          // path to signup page  
+  { path: 'newQuestion', component: NewQuestionComponent }, // path to new question component
+  { path: 'viewUsers', component: ListUsersComponent },    // path to view the list of users
+  { path: 'newCourse', component: CreateNewCourseComponent },
+  { path: 'course/questionSetManagement/:courseID', component: QuestionSetManagementComponent },
+  { path: 'submissions/:questionId', component: ViewSubmissionsComponent }
 ];
 
 

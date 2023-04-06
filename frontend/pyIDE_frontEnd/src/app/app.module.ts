@@ -46,6 +46,7 @@ import { NewQuestionComponent } from './new-question/new-question.component';
 import { ListUsersComponent } from './list-users/list-users.component';
 
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ViewSubmissionsComponent } from './view-submissions/view-submissions.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     AdminCardComponent,
     NewQuestionComponent,
     ListUsersComponent,
+    ViewSubmissionsComponent,
   ],
   imports: [
     BrowserModule,

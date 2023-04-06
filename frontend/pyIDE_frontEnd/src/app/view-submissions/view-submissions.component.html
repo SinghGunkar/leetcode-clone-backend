@@ -1,0 +1,25 @@
+<app-toolbar></app-toolbar>
+
+<mat-card class="card_ML">
+    <mat-card-header>
+        <mat-card-title>{{questionTitle}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-container">
+            <table mat-table [dataSource]="submissions">
+                <ng-container matColumnDef="Name">
+                    <th mat-header-cell class="mat-column-Name" *matHeaderCellDef> Name </th>
+                    <td mat-cell class="mat-column-Name" *matCellDef="let submission"> {{ submission.userID.name }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="codeResults">
+                    <th mat-header-cell class="mat-column-codeResults" *matHeaderCellDef> Code Results </th>
+                    <td mat-cell class="mat-column-codeResults" *matCellDef="let submission"> {{
+                        submission.codeResults}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let submission; columns: displayedColumns"></tr>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>
