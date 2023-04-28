@@ -1,31 +1,153 @@
-# CMPT 372 - Group 17: Web IDE
+### Database design
 
-## Link to Application
-url:https://372asn.wzy990888.net/#/
-url:http://372asn.wzy990888.net/#/
+![](misc/db_relationship.png)
 
+### User endpoints
 
+---
 
+`/user/signUP`
 
+**Description:** Registers a new user. By default, a user will be a student.
 
+-   Protected: No
+-   Permissions: Anyone
 
-## Current Features
+---
 
-### ```/```
-Login page for existing users
-<br>
-<br>
+`/user/login`
 
-### ```/signup```
-Sign up page for new users,
-We are currently moving from session-based authentication to token-based authentication, so some authentication features are temporarily disabled in this release.
-<br>
-<br>
+**Description:** Logs a user in.
 
-### ```/dashboard```
-After logging in, the student can view all the questions assigned to them through the dashboard
-<br>
-<br>
+-   Protected: No
+-   Permissions: Anyone
 
-### ```/question/:qid```
-View a specific question. This view has a integrated Python IDE. There is also an option to upload a file. On upload, the contents of the file will be dumped into the web IDE
+---
+
+`/user/logout`
+
+**Description:** Logs out a user.
+
+-   Protected: No
+-   Permissions: Anyone
+
+---
+
+`/user/getLoggedInUser`
+
+**Description:** Gets info about the current logged in user.
+
+-   Protected: Yes
+-   Permissions: Anyone
+
+---
+
+`/user/delete/:userID`
+
+**Description:** Deletes an existing user.
+
+-   Protected: Yes
+-   Permissions: Admin
+
+---
+
+`/user/getAllUsers`
+
+**Description:** Gets a list of all registered users.
+
+-   Protected: Yes
+-   Permissions: Admin
+
+### Submission endpoints
+
+---
+
+`/submission/runCode`
+
+**Description:** Runs the provided code.
+
+-   Protected: Yes
+-   Permissions: Student, Admin
+
+---
+
+`/submission/submitCode/:userID/:questionID`
+
+**Description:** Submits the code for evaluation.
+
+-   Protected: Yes
+-   Permissions: Student, Admin
+
+---
+
+`/submission/getSubmissions/:questionID`
+
+**Description:** Gets all submissions for a particular question.
+
+-   Protected: Yes
+-   Permissions: Student, Admin
+
+---
+
+`/submission/getOneSubmission/:userID/:questionID`
+
+**Description:** Gets a single submission for a user and question.
+
+-   Protected: Yes
+-   Permissions: Student, Admin
+
+---
+
+`/submission/deleteOneSubmission:/userID/:questionID`
+
+**Description:** Deletes a single submission for a user and question.
+
+-   Protected: Yes
+-   Permissions: Student, Admin
+
+### Question endpoints
+
+---
+
+`/question/getQuestion/:questionID`
+
+**Description:** Gets a single question by ID.
+
+-   Protected: Yes
+-   Permissions: Student, Admin
+
+---
+
+`/question/allQuestions`
+
+**Description:** Gets all questions.
+
+-   Protected: Yes
+-   Permissions: Student, Admin
+
+---
+
+`/question/createQuestion`
+
+**Description:** Creates a new question.
+
+-   Protected: Yes
+-   Permissions: Admin
+
+---
+
+`/question/updateQuestion/:questionID`
+
+**Description:** Updates an existing question.
+
+-   Protected: Yes
+-   Permissions: Admin
+
+---
+
+`/question/deleteQuestion/:questionID`
+
+**Description:** Deletes an existing question.
+
+-   Protected: Yes
+-   Permissions: Admin
