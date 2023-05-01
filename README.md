@@ -1,5 +1,3 @@
-### Database design
-
 ![](backendv2/misc/db_relationship.png)
 
 ### User endpoints
